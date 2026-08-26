@@ -19,9 +19,6 @@
     display:flex;
     flex-direction:column;
 position: fixed;
-    
-
-
 }
 .nav>div{
     width: 478px;
@@ -45,9 +42,20 @@ box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
     width: 201px;
     height:181px;
 }
-.links>li{
-    width:100%;
+.links li{
+    background-color:blue;
+    display:flex;
+    text-align:left;
+    justify-content:start;
+    align-items:start;
+
 }
+a{
+    text-align:left;
+    justify-content:start;
+    align-items:left;
+}
+
 .adminpanelh1{
     font-family: 'Jost', sans-serif;
     font-weight: 700;
