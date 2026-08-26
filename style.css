@@ -1,5 +1,27 @@
 /*general rules */
- *{border: box 0;
-padding:0;
-margin: 0;
+* {
+  border: box 0;
+  padding: 0;
+  margin: 0;
 }
+
+/* 
+h1{
+
+font-family: 'Jost' Bold 20px;
+} */
+a{
+ font-family: 'Jost', sans-serif;
+color:white;
+text-decoration: none;
+
+
+}
+a.active{
+ font-family: 'Jost', sans-serif;
+color:white;
+text-decoration: none;
+font-weight:200;
+
+}
+
