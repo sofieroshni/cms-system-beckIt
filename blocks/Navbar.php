@@ -2,9 +2,9 @@
     <div >
         <h1 class="adminpanelh1">Adminpanel</h1> </div>
     <ul class="links">
-        <a href=""> <li>Dine Sider</li></a>
-        <a href=""> <li>Opret side</li></a>
-        <a href=""> <li>Galleri</li></a>
+        <a href="admin/index.php"> <li>Dine Sider</li></a>
+        <a href="admin/create-page.php"> <li>Opret side</li></a>
+        <a href="blocks/Gallery.php"> <li>Galleri</li></a>
         <a href=""> <li>Settings</li></a>
 
     </ul>
