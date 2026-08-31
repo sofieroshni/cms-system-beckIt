@@ -113,5 +113,6 @@ $blocks = $stmt->get_result();
             <button type="submit">+ Tilføj sektion</button>
         </form>
     </div>
+   <a href="index.php">tilbage til dine sider index.php</a>
 </body>
 </html>
