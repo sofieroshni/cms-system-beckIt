@@ -31,19 +31,64 @@ $blocks = $stmt->get_result();
 
     <div class="editor-sections">
         <?php while ($block = mysqli_fetch_assoc($blocks)): ?>
+            <?php
+                $className = BlockRegistry::get($block['block_type']);
+                $data      = json_decode($block['settings'], true) ?? [];
+                $schema    = $className ? $className::getSchema() : [];
+            ?>
             <div class="editor-section" data-block-id="<?= (int)$block['id'] ?>">
                 <span class="section-label"><?= htmlspecialchars($block['block_type']) ?></span>
-                <button class="edit-btn">✎</button>
-                <button class="delete-btn">✕</button>
+
+                    <form method="POST" action="delete-block.php" class="delete-form"
+                    onsubmit="return confirm('Er du sikker på, du vil slette denne blok?');">
+                    <input type="hidden" name="block_id" value="<?= (int)$block['id'] ?>">
+                    <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
+                    <button type="submit" class="delete-btn">✕</button>
+                </form>
+
                 <div class="section-preview">
-                    <?php
-                        $className = BlockRegistry::get($block['block_type']);
-                        $data = json_decode($block['settings'], true) ?? [];
-                        echo $className ? $className::render($data) : '(ukendt blok-type)';
-                    ?>
+                    <?= $className ? $className::render($data) : '(ukendt blok-type)' ?>
                 </div>
+
+                <form method="POST" action="save-block.php" class="block-form">
+                    <input type="hidden" name="block_id" value="<?= (int)$block['id'] ?>">
+                    <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
+
+                    <?php foreach ($schema as $fieldName => $fieldConfig): ?>
+                        <label>
+                            <?= htmlspecialchars($fieldConfig['label']) ?>:
+                            <?php if ($fieldConfig['type'] === 'richtext'): ?>
+                                <textarea name="<?= htmlspecialchars($fieldName) ?>"><?= htmlspecialchars($data[$fieldName] ?? '') ?></textarea>
+                            <?php else: ?>
+                                <input type="text"
+                                       name="<?= htmlspecialchars($fieldName) ?>"
+                                       value="<?= htmlspecialchars($data[$fieldName] ?? '') ?>">
+                            <?php endif; ?>
+                        </label><br>
+                    <?php endforeach; ?>
+
+                    <button type="submit">Gem</button>
+                </form>
             </div>
+            <hr>
         <?php endwhile; ?>
+    </div>
+
+    <!-- Tilføj ny blok -->
+    <div class="add-block">
+        <form method="POST" action="add-block.php">
+            <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
+
+            <select name="block_type">
+                <?php foreach (BlockRegistry::all() as $type => $class): ?>
+                    <option value="<?= htmlspecialchars($type) ?>">
+                        <?= htmlspecialchars(ucfirst($type)) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+
+            <button type="submit">+ Tilføj sektion</button>
+        </form>
     </div>
 </body>
 </html>

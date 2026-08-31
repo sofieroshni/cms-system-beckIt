@@ -10,6 +10,10 @@ class GalleryBlock implements BlockInterface {
 
     public static function render(array $data): string {
         $images = $data['images'] ?? [];
+        if (!is_array($images)) {
+            $images = [];
+        }
+
         $html = "<section class='gallery-block'>";
         foreach ($images as $img) {
             $safe = htmlspecialchars($img);
