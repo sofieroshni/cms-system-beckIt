@@ -19,6 +19,12 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
                 <?= htmlspecialchars($page['title']) ?>
                 — status: <?= htmlspecialchars($page['status']) ?>
                 — <a href="editor.php?page_id=<?= (int)$page['id'] ?>">Rediger</a>
+
+                <form method="POST" action="delete-page.php" style="display:inline;"
+                      onsubmit="return confirm('Slet siden og alle dens sektioner?');">
+                    <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
+                    <button type="submit">✕</button>
+                </form>
             </li>
         <?php endwhile; ?>
     </ul>
