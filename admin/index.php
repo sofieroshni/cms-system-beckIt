@@ -14,13 +14,14 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
 </head>
 <body>
    
+<section class=admin-section>
+        <h1 class="admin-h1">Dine sider</h1>
 
-    <h1 class="admin-h1">Dine sider</h1>
-
-    <ul>
+    <ul class="bjælker" >
         <?php while ($page = mysqli_fetch_assoc($result)): ?>
-            <li>
-                <?= htmlspecialchars($page['title']) ?>
+            <li class="bjælke">
+                <div class="move-dots"> <p >:::</p></div>
+              <h3 class="page-title">  <?= htmlspecialchars($page['title']) ?></h3>
                 — status: <?= htmlspecialchars($page['status']) ?>
                 — <a href="editor.php?page_id=<?= (int)$page['id'] ?>">Rediger</a>
 
@@ -29,10 +30,16 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
                     <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
                     <button type="submit">✕</button>
                 </form>
+            <h3 class="page-title">  <?= htmlspecialchars($page['id']) ?></h3> <!*spørg khalid Igen om dette her pga.der måske mangler auto-incremcement*!>
+
+                
             </li>
         <?php endwhile; ?>
     </ul>
-    <a href="create-page.php" class="addpage">Tifløj side</button>   </a>   
+    <a href="create-page.php" class="addpage">Tifløj side</button>   </a>  
+
+</section>
+    
 </body>
 </html>
 <style>

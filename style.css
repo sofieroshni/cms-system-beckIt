@@ -9,13 +9,28 @@
     --blue: #5271AC;
     --active: #F0AD72;
     --basic: #E4E4E4;
+    --black: #363434
 }
 body{
   background-color: var(--basic);
   height: 4664px;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
+p{
+   font-family: 'Jost', sans-serif;
 
+}
+h3{
+     font-family: 'inter', sans-serif;
+     font-size:20px;
+
+
+}
 a{
  font-family: 'Jost', sans-serif;
 color:white;
@@ -34,5 +49,62 @@ font-weight:200;
    font-family: 'Jost', sans-serif;
     font-weight: 900;
     font-size: 32px;
-    color: white;
+    color: var(--black);
+
+}
+
+
+/* /STYLINGEN PÅ AMDIN/INDEX.PHP ACA. MINE SIDER/ */
+.admin-section{
+  /* width:848px; !GØR KHALID OPMÆRSOM PÅ DETTE */
+  width:848px;
+  background-color: rgb(255, 219, 73);
+}
+
+ul{
+
+  list-style-type:none;
+}
+/* hver hvid bjælke på admin/index.php* admin-panel*/
+.bjælker{
+  /* listen med alle bjækerne */
+  
+}
+.bjælke{
+  background-color:blue;
+  border-radius:5px;
+  background-color:white;
+  height:56px;
+box-shadow: 0 4px 12px 2px rgba(0, 0, 0, 0.25);
+
+display:flex;
+justify-content: center;
+justify-content: space-between;
+text-align: center;
+flex-direction: row;
+padding:0px;;
+margin:0px;
+margin-bottom:8px; //**spørg Khalid igen om margin-forhold**//
+margin-top:8px;
+padding-right:8px;
+align-items:center;
+}
+.bjælke >h3{
+
+}
+
+
+.move-dots{
+  color: rgb(14, 11, 11);
+  font-size:15px;
+  background-color: red;
+  width: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: var(--blue);
+  border-radius:5px;
+  color:white;
+  height:100%;
 }
