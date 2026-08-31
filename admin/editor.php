@@ -25,7 +25,6 @@ $blocks = $stmt->get_result();
     <title>Rediger: <?= htmlspecialchars($page['title']) ?></title>
 </head>
 <body>
-    <?php include('../blocks/Navbar.php'); ?>
 
     <h1>Redigerer: <?= htmlspecialchars($page['title']) ?></h1>
 
