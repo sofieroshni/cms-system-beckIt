@@ -36,7 +36,7 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
             </li>
         <?php endwhile; ?>
     </ul>
-    <a href="create-page.php" class="addpage">Tifløj side</button>   </a>  
+    <a href="create-page.php" class="addpage">Tifløj side +</button>   </a>  
 
 </section>
     
@@ -44,10 +44,19 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
 </html>
 <style>
 .addpage{
-    background: #ff7d03;
     color:white;
-    width:400px;
+    width:100%;
     display:flex;
     justify-content:center;
+     border: 1px dashed #F0AD72;
+   font-family: 'Jost', sans-serif; /*spørg khalid om det inter eller jost!**/
+     color: #F0AD72;
+     height:42px;
+display:flex;
+font-weight: 700;
+align-items:center;
+text-align:center;
+flex-direction:column;
+
 }
 </style>

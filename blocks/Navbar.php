@@ -2,9 +2,9 @@
     <div >
         <h1 class="adminpanelh1">Adminpanel</h1> </div>
     <ul class="links">
-        <a href="admin/index.php" > <li class="active">Dine Sider</li></a>
-        <a href="admin/create-page.php"> <li>Opret side</li></a>
-        <a href="blocks/Gallery.php"> <li>Galleri</li></a>
+        <a href="index.php" > <li class="active">Dine Sider</li></a>
+        <a href="create-page.php"> <li>Opret side</li></a>
+        <a href="Gallery.php"> <li>Galleri</li></a>
         <a href=""> <li>Settings</li></a>
 
     </ul>
@@ -21,7 +21,7 @@
     flex-direction:column;
     margin:0;
     padding:0px; 
-    background-color:blue;
+    background-color:purple;
     box-sizing: border-box;
 }
 .nav>div{

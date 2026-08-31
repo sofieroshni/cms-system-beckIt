@@ -58,7 +58,7 @@ font-weight:200;
 .admin-section{
   /* width:848px; !GØR KHALID OPMÆRSOM PÅ DETTE */
   width:848px;
-  background-color: rgb(255, 219, 73);
+background-color:yellow;
 }
 
 ul{
@@ -70,8 +70,11 @@ ul{
   /* listen med alle bjækerne */
   
 }
+.bjælke.orange{
+
+}
 .bjælke{
-  background-color:blue;
+  /* background-color:blue; */
   border-radius:5px;
   background-color:white;
   height:56px;
@@ -88,6 +91,10 @@ margin-bottom:8px; //**spørg Khalid igen om margin-forhold**//
 margin-top:8px;
 padding-right:8px;
 align-items:center;
+}
+/* //HALVUSYNLIGE BLÆLKER */
+.bjælke.orange{
+  
 }
 .bjælke >h3{
 
