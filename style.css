@@ -1,15 +1,21 @@
 /*general rules */
 * {
-  border: box 0;
+  box-sizing: border-box 0;
   padding: 0;
   margin: 0;
 }
 
-/* 
-h1{
+:root {
+    --blue: #5271AC;
+    --active: #F0AD72;
+    --basic: #E4E4E4;
+}
+body{
+  background-color: var(--basic);
+  height: 4664px;
+}
 
-font-family: 'Jost' Bold 20px;
-} */
+
 a{
  font-family: 'Jost', sans-serif;
 color:white;
@@ -24,4 +30,9 @@ text-decoration: none;
 font-weight:200;
 
 }
-
+.admin-h1{
+   font-family: 'Jost', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    color: white;
+}

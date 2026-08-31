@@ -1,5 +1,7 @@
 <?php
 require_once '../include/database.php';
+require_once '../blocks/Navbar.php';
+
 
 $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC");
 ?>
@@ -8,10 +10,12 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
 <head>
     <meta charset="UTF-8">
     <title>Dine sider</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+   
 
-    <h1>Dine sider</h1>
+    <h1 class="admin-h1">Dine sider</h1>
 
     <ul>
         <?php while ($page = mysqli_fetch_assoc($result)): ?>
@@ -38,6 +42,5 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
     width:400px;
     display:flex;
     justify-content:center;
-
 }
 </style>
