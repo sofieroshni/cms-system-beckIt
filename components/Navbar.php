@@ -2,10 +2,10 @@
     <div >
         <h1 class="adminpanelh1">Adminpanel</h1> </div>
     <ul class="links">
-        <a href="index.php" > <li class="active">Dine Sider</li></a>
-        <a href="#" onClick="toggleSlide()"> <li>Opret side</li></a>
-        <a href="Gallery.php"> <li>Galleri</li></a>
-        <a href=""> <li>Settings</li></a>
+        <a href="index.php" class="link" > <li class="active">Dine Sider</li></a>
+        <a href="#" onClick="toggleSlide()" class="link"> <li>Opret side</li></a>
+        <a href="Gallery.php" class="link" ><li>Galleri</li></a>
+        <a href="" class="link" ><li>Settings</li></a>
 
     </ul>
     <div class="slider" id="slider">
@@ -76,7 +76,7 @@ padding:16px;
     padding:8px;
 
 }
-.links li.active{
+.links > a > li.active{
     background-color: var(--active);
     display:flex;
     text-align:left;
@@ -170,6 +170,11 @@ opacity:0;
 <script>
 function toggleSlide(){
     document.getElementById('slider').classList.toggle('active');
+}
+function changeColor(){
+    document.querySelectorAll('links').forEach((el) => {
+        el.classList.toggle('active');
+    });
 }
 
 </script>
