@@ -52,6 +52,7 @@ font-weight:200;
     font-weight: 900;
     font-size: 32px;
     color: var(--black);
+    margin-bottom: 50px;
 
 }
 
@@ -60,7 +61,9 @@ font-weight:200;
 .admin-section{
   /* width:848px; !GØR KHALID OPMÆRSOM PÅ DETTE */
   width:848px;
-background-color:yellow;
+  margin-top:124px;
+  padding-left:280px; /*DISKUTER MED KHALID OM PADDINGEN NÅR HAN ER BLEVET NORMAL*/
+/* background-color:yellow; */
 }
 
 ul{
@@ -127,7 +130,7 @@ align-items:center;
               align-items: center;
               justify-content:space-between;
               width:30%;
-              background-color:brown;
+              /* background-color:brown; */
 
           }
           .left-side> h3{
@@ -136,11 +139,12 @@ align-items:center;
 
           /* //højre side af bjæken med edit og alle de andr eikoner */
           .icons{
-              background-color:purple;
+              /* background-color:pink; */
               display:flex;
-              width:50% ;
-              justify-content: end;
+              width:150px ;
+              justify-content: space-between;
               text-align:center;
+              align-items:center;
 
 
           }
@@ -160,4 +164,27 @@ align-items:center;
 }
 .status.unpublished{
   background-color: var(--unpublished);
+}
+
+/* ///slet og rediger knapper */
+.delete{
+  background-color:#FA5E60;
+   
+  color:white;
+  width: 20px;
+  height:20px  ;
+  border:none;
+  font-size:12px;
+  font-color:white;
+  border-radius:2px;
+}
+.rediger{
+  background-color:#5271AC;
+  color:white;
+  width: 20px;
+  height:20px  ;
+  border:none;
+  font-size:12px;
+  font-color:white;
+  border-radius:2px;
 }

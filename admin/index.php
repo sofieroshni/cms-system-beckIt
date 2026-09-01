@@ -32,13 +32,16 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
                 <p class="status unpublished">Kladde</p>
             <?php endif; ?>
                                     
-                                <a href="editor.php?page_id=<?= (int)$page['id'] ?>">                                    <i class="fa-solid fa-pen"></i>
-                                </a>
+               <button class="rediger">
+                <a href="editor.php?page_id=<?= (int)$page['id'] ?>">  
+                       <i class="fa-solid fa-pen"></i>
+                    </a>
+                                                </button>
             
                 <form method="POST" action="delete-page.php" style="display:inline;"
                       onsubmit="return confirm('Slet siden og alle dens sektioner?');">
                     <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
-                    <button type="submit">✕</button>
+                    <button type="submit" class="delete"><i class="fa-solid fa-trash"></i></button>
                 </form>
             <h3 class="page-title">  <?= htmlspecialchars($page['id']) ?></h3> <!*spørg khalid Igen om dette her pga.der måske mangler auto-incremcement*!>   
         </div>   </li>
@@ -47,7 +50,7 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
 
 
 
-    <a href="create-page.php" class="addpage">Tifløj side +</button>   </a>  
+    <a href="create-page.php" class="addpage">Opret side +</button>   </a>  
 
 </section>
     

@@ -21,8 +21,10 @@
     flex-direction:column;
     margin:0;
     padding:0px; 
-    background-color:purple;
+    /* background-color:purple; */
     box-sizing: border-box;
+    position:fixed;
+    top:0px;
 }
 .nav>div{
     width: 478px;
