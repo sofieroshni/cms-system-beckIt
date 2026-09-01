@@ -32,11 +32,11 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
                 <p class="status unpublished">Kladde</p>
             <?php endif; ?>
                                     
-               <button class="rediger">
-                <a href="editor.php?page_id=<?= (int)$page['id'] ?>">  
+              <a href="editor.php?page_id=<?= (int)$page['id'] ?>">  <button class="rediger">
+                 
                        <i class="fa-solid fa-pen"></i>
-                    </a>
-                                                </button>
+                  
+                 </button>  </a>
             
                 <form method="POST" action="delete-page.php" style="display:inline;"
                       onsubmit="return confirm('Slet siden og alle dens sektioner?');">
