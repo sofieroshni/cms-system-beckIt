@@ -9,11 +9,13 @@
     --blue: #5271AC;
     --active: #F0AD72;
     --basic: #E4E4E4;
-    --black: #363434
+    --black: #363434;
+    --published: #68B335;
+    --unpublished: #4B799A;
 }
 body{
   background-color: var(--basic);
-  height: 4664px;
+  /* height: 4664px; */
   display:flex;
   flex-direction: column;
   justify-content: center;
@@ -81,7 +83,6 @@ ul{
 box-shadow: 0 4px 12px 2px rgba(0, 0, 0, 0.25);
 
 display:flex;
-justify-content: center;
 justify-content: space-between;
 text-align: center;
 flex-direction: row;
@@ -99,8 +100,6 @@ align-items:center;
 .bjælke >h3{
 
 }
-
-
 .move-dots{
   color: rgb(14, 11, 11);
   font-size:15px;
@@ -114,4 +113,51 @@ align-items:center;
   border-radius:5px;
   color:white;
   height:100%;
+}
+
+
+          /* venstre side af bjælken med blå boks med prikker+ sidens titel (h3') */
+          .left-side{
+              height:100%;
+              padding:0px;
+              margin:0px;
+
+              display:flex;
+              flex-direction:row;
+              align-items: center;
+              justify-content:space-between;
+              width:30%;
+              background-color:brown;
+
+          }
+          .left-side> h3{
+            padding-left:8px;
+          }
+
+          /* //højre side af bjæken med edit og alle de andr eikoner */
+          .icons{
+              background-color:purple;
+              display:flex;
+              width:50% ;
+              justify-content: end;
+              text-align:center;
+
+
+          }
+.status{
+    background-color: #020202;
+     font-family: 'Jost', sans-serif; /*spørg khalid om det inter eller jost!**/
+     color: white;
+     width:54px;
+     border-radius:15px;
+     padding:8px;
+     font-size:12px;
+     margin-right:8px;
+
+}
+.status.published{
+  background-color: var(--published);
+}
+.status.unpublished{
+  background-color: var(--unpublished);
 }

@@ -12,6 +12,7 @@ $status = $_POST['status'] ?? 'draft';
 
 if (!in_array($status, ['draft', 'published'], true)) {
     $status = 'draft';
+  
 }
 
 $stmt = $connection->prepare(

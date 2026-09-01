@@ -14,7 +14,7 @@
 </head>
 <body>
    <header>
- <?php    include('blocks/Navbar.php'); ?>
+ <?php    include('../components/Navbar.php'); ?>
    </header>    
           
 </body>

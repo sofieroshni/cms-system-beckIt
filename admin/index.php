@@ -1,6 +1,6 @@
 <?php
 require_once '../include/database.php';
-require_once '../blocks/Navbar.php';
+require_once '../components/Navbar.php';
 
 
 $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC");
@@ -10,7 +10,8 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
 <head>
     <meta charset="UTF-8">
     <title>Dine sider</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../style.css">'<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">'
+    
 </head>
 <body>
    
@@ -20,22 +21,32 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
     <ul class="bjælker" >
         <?php while ($page = mysqli_fetch_assoc($result)): ?>
             <li class="bjælke">
-                <div class="move-dots"> <p >:::</p></div>
-              <h3 class="page-title">  <?= htmlspecialchars($page['title']) ?></h3>
-                — status: <?= htmlspecialchars($page['status']) ?>
-                — <a href="editor.php?page_id=<?= (int)$page['id'] ?>">Rediger</a>
+                <div class="left-side"  >  <div class="move-dots"> <p >:::</p></div>
+                                    <h3 class="page-title">  <?= htmlspecialchars($page['title']) ?></h3></div>
+              
+                               <div class="icons">
 
+            <?php if ($page['status'] === 'published'): ?>
+                <p class="status published">Udgivet</p>
+            <?php else: ?>
+                <p class="status unpublished">Kladde</p>
+            <?php endif; ?>
+                                    
+                                <a href="editor.php?page_id=<?= (int)$page['id'] ?>">                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+            
                 <form method="POST" action="delete-page.php" style="display:inline;"
                       onsubmit="return confirm('Slet siden og alle dens sektioner?');">
                     <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
                     <button type="submit">✕</button>
                 </form>
-            <h3 class="page-title">  <?= htmlspecialchars($page['id']) ?></h3> <!*spørg khalid Igen om dette her pga.der måske mangler auto-incremcement*!>
-
-                
-            </li>
+            <h3 class="page-title">  <?= htmlspecialchars($page['id']) ?></h3> <!*spørg khalid Igen om dette her pga.der måske mangler auto-incremcement*!>   
+        </div>   </li>
         <?php endwhile; ?>
     </ul>
+
+
+
     <a href="create-page.php" class="addpage">Tifløj side +</button>   </a>  
 
 </section>
@@ -59,4 +70,5 @@ text-align:center;
 flex-direction:column;
 
 }
+
 </style>
