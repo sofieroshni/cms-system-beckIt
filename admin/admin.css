@@ -1,0 +1,452 @@
+/* =====================================================================
+   Adminpanel
+   Farverne følger Figma-designet: blå sidebar, orange fremhævning,
+   lys grå baggrund.
+   ===================================================================== */
+
+:root {
+    --admin-blue: #4a6fa5;
+    --admin-blue-dark: #3d5c8a;
+    --admin-orange: #e8a15d;
+    --admin-bg: #e5e5e5;
+    --admin-surface: #ffffff;
+    --admin-text: #2b3440;
+    --admin-muted: #6b7684;
+    --admin-danger: #dc3545;
+    --admin-success: #4a9d5f;
+
+    --radius: 4px;
+    --shadow: 0 1px 3px rgb(0 0 0 / 0.12);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.admin {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Jost', system-ui, sans-serif;
+    color: var(--admin-text);
+    background: var(--admin-bg);
+}
+
+/* --- Sidebar ------------------------------------------------------- */
+
+.sidebar {
+    background: var(--admin-blue);
+    color: #fff;
+    padding-bottom: 2rem;
+}
+
+.sidebar__brand {
+    margin: 0;
+    padding: 2rem 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.sidebar__nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar__nav a {
+    display: block;
+    padding: 0.7rem 1.5rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.sidebar__nav a:hover {
+    background: var(--admin-blue-dark);
+}
+
+/* aria-current markerer den aktive side for både øje og skærmlæser,
+   frem for kun en visuel klasse. */
+.sidebar__nav a[aria-current='page'] {
+    background: var(--admin-orange);
+}
+
+/* --- Indhold ------------------------------------------------------- */
+
+.content {
+    padding: 3rem;
+    max-width: 60rem;
+    margin-inline: auto;
+    width: 100%;
+}
+
+.content__title {
+    margin: 0 0 2rem;
+    text-align: center;
+    font-size: 2.2rem;
+}
+
+.section-heading {
+    margin: 2rem 0 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.alert {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    background: #fdecea;
+    border-left: 4px solid var(--admin-danger);
+    border-radius: var(--radius);
+}
+
+.empty {
+    text-align: center;
+    color: var(--admin-muted);
+}
+
+/* --- Sideliste ----------------------------------------------------- */
+
+.page-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+}
+
+.page-row {
+    display: grid;
+    grid-template-columns: 44px 1fr auto auto auto auto 2rem;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--admin-surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.page-row__handle {
+    display: grid;
+    place-items: center;
+    align-self: stretch;
+    background: var(--admin-blue);
+    color: #fff;
+    cursor: grab;
+    font-size: 1.2rem;
+}
+
+.page-row__title {
+    padding: 1rem 0.5rem;
+    font-weight: 600;
+}
+
+.page-row__delete {
+    margin: 0;
+}
+
+.page-row__order {
+    text-align: center;
+    font-weight: 700;
+    color: var(--admin-muted);
+}
+
+.badge {
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    color: #fff;
+}
+
+.badge--published {
+    background: var(--admin-success);
+}
+
+.badge--draft {
+    background: var(--admin-blue);
+}
+
+.icon-btn {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: var(--radius);
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    background: var(--admin-blue);
+}
+
+.icon-btn--delete {
+    background: var(--admin-danger);
+}
+
+.icon-btn--view {
+    background: var(--admin-muted);
+}
+
+.icon-btn:hover {
+    filter: brightness(1.1);
+}
+
+.create-link {
+    display: block;
+    margin-top: 0.8rem;
+    padding: 1rem;
+    text-align: center;
+    color: var(--admin-orange);
+    text-decoration: none;
+    font-weight: 600;
+    border: 2px dashed var(--admin-orange);
+    border-radius: var(--radius);
+}
+
+.create-link:hover {
+    background: rgb(232 161 93 / 0.1);
+}
+
+/* --- Opret side ---------------------------------------------------- */
+
+.create-form {
+    background: var(--admin-surface);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.field label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+}
+
+.field input[type='text'] {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    font: inherit;
+    border: 1px solid #c7ccd3;
+    border-radius: var(--radius);
+}
+
+.field input:focus-visible {
+    outline: 2px solid var(--admin-blue);
+    outline-offset: 1px;
+}
+
+.field__hint {
+    margin: 0.4rem 0 0;
+    font-size: 0.85rem;
+    color: var(--admin-muted);
+}
+
+.choices {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.choice {
+    display: block;
+    cursor: pointer;
+}
+
+/* Radioknappen skjules visuelt, men bliver i DOM'en, så tastatur og
+   skærmlæser stadig virker. display:none ville fjerne den helt. */
+.choice input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.choice__body {
+    display: grid;
+    gap: 0.4rem;
+    padding: 0.8rem;
+    height: 100%;
+    border: 2px solid #d5dae0;
+    border-radius: var(--radius);
+    background: #fafbfc;
+}
+
+.choice input:checked + .choice__body {
+    border-color: var(--admin-orange);
+    background: rgb(232 161 93 / 0.08);
+}
+
+/* Fokusmarkering, når man tabber gennem kortene. */
+.choice input:focus-visible + .choice__body {
+    outline: 3px solid var(--admin-blue);
+    outline-offset: 2px;
+}
+
+.choice__thumb {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius);
+    background: #e9edf1;
+    color: var(--admin-muted);
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.choice__thumb--blank {
+    font-size: 2.5rem;
+    color: var(--admin-orange);
+}
+
+.choice__title {
+    font-weight: 700;
+}
+
+.choice__text {
+    font-size: 0.85rem;
+    color: var(--admin-muted);
+}
+
+/* --- Knapper ------------------------------------------------------- */
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.btn {
+    padding: 0.7rem 1.5rem;
+    border: 0;
+    border-radius: var(--radius);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn--primary {
+    background: var(--admin-orange);
+    color: #fff;
+}
+
+.btn--ghost {
+    background: transparent;
+    color: var(--admin-muted);
+    border: 1px solid #c7ccd3;
+}
+
+.btn:hover {
+    filter: brightness(1.05);
+}
+
+@media (max-width: 48rem) {
+    .admin {
+        grid-template-columns: 1fr;
+    }
+
+    .content {
+        padding: 1.5rem;
+    }
+}
+
+/* --- Traek-og-slip i sidelisten ------------------------------------- */
+
+/* Raekken der loeftes. */
+.page-row.is-dragging {
+    opacity: 0.4;
+}
+
+/* Markering af, hvor raekken lander, hvis man slipper nu. */
+.page-row.is-over {
+    outline: 2px dashed var(--admin-orange);
+    outline-offset: -2px;
+}
+
+.page-row__handle:active {
+    cursor: grabbing;
+}
+
+.list-status {
+    min-height: 1.4rem;
+    margin: 0.6rem 0 0;
+    text-align: right;
+    font-size: 0.85rem;
+    color: var(--admin-muted);
+}
+
+/* --- Paneler og tabel paa udgiv-skaermen ---------------------------- */
+
+.panel {
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    background: var(--admin-surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.panel h2 {
+    margin: 0 0 0.6rem;
+    font-size: 1.1rem;
+}
+
+.panel p {
+    margin: 0 0 0.6rem;
+}
+
+.panel--success {
+    border-left: 4px solid var(--admin-success);
+}
+
+.panel code,
+.table code {
+    padding: 0.1rem 0.35rem;
+    background: #eef1f4;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--admin-surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.table th,
+.table td {
+    padding: 0.7rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eceff2;
+}
+
+.table th {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--admin-muted);
+}
+
+.table tr:last-child td {
+    border-bottom: 0;
+}
+
+/* Kladder daempes, saa det er tydeligt hvad der IKKE kommer med. */
+.is-muted {
+    color: var(--admin-muted);
+    opacity: 0.7;
+}
+
+.actions .btn:disabled {
+    opacity: 0.45;
+    cursor: default;
+}

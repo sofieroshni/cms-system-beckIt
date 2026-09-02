@@ -1,0 +1,52 @@
+/* =====================================================================
+   Fælles grundlag for alle sider.
+   Indlæses altid, før blokkenes egen CSS, så en blok kan overskrive her.
+   ===================================================================== */
+
+:root {
+    --color-text: #1f2933;
+    --color-muted: #52606d;
+    --color-surface: #ffffff;
+    --color-border: #d9dde2;
+
+    --font-body: 'Jost', system-ui, -apple-system, sans-serif;
+
+    --space-sm: 0.75rem;
+    --space-md: 1.5rem;
+    --space-lg: 3rem;
+
+    --measure: 68ch;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background: var(--color-surface);
+    line-height: 1.6;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Blokke støder op til hinanden uden mellemrum; hver blok styrer selv
+   sin indvendige afstand. */
+.block {
+    position: relative;
+}
+
+/* Synlig fokusmarkering. Fjernes den, bliver sitet ubrugeligt for
+   tastaturbrugere. */
+:where(a, button):focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+}

@@ -1,0 +1,91 @@
+/* =====================================================================
+   Hero
+   Variablerne herunder er standardværdier. Har brugeren valgt noget i
+   editoren, skriver blokken en style-attribut på .block--hero, som
+   overskriver dem. Værdierne dér er allerede valideret af FieldValidator,
+   så de kan ikke indeholde andet end tal og hex-farver.
+   ===================================================================== */
+
+.block--hero {
+    --title-size: 48px;
+    --font-family: 'Jost';
+    --text-color: #ffffff;
+    --box-color: #1e3a8a;
+
+    display: grid;
+    place-items: center;
+    min-height: 380px;
+    padding: var(--space-lg) var(--space-md);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.hero__background {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Mørkt lag over billedet, så teksten er læsbar uanset hvilket
+   baggrundsbillede redaktøren vælger. */
+.hero__background::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 0.35);
+}
+
+.hero__panel {
+    text-align: center;
+    max-width: var(--measure);
+}
+
+.hero__title {
+    margin: 0;
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--box-color);
+    color: var(--text-color);
+    font-family: var(--font-family), var(--font-body);
+    font-size: var(--title-size);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px;
+    margin: 2px 0 0;
+}
+
+.hero__address,
+.hero__phone {
+    padding: var(--space-sm) var(--space-md);
+    background: var(--box-color);
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.hero__phone {
+    text-decoration: none;
+}
+
+.hero__phone:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 40rem) {
+    .block--hero {
+        min-height: 260px;
+    }
+
+    /* Brugerens skriftstørrelse skaleres ned på små skærme i stedet for
+       at blive ignoreret, så valget stadig har effekt. */
+    .hero__title {
+        font-size: clamp(1.5rem, 7vw, var(--title-size));
+        padding: var(--space-sm) var(--space-md);
+    }
+}

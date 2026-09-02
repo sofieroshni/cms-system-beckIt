@@ -1,0 +1,337 @@
+/* =====================================================================
+   Editoren
+   Ligger oven på admin.css og genbruger dens farvevariabler.
+   ===================================================================== */
+
+.editor {
+    display: block;
+    margin: 0;
+    /* Plads til den faste footer, så den aldrig dækker sidste blok. */
+    padding-bottom: 6rem;
+    background: var(--admin-bg);
+    font-family: 'Jost', system-ui, sans-serif;
+    color: var(--admin-text);
+}
+
+/* --- Topbjælke ----------------------------------------------------- */
+
+.ed-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--admin-surface);
+    box-shadow: var(--shadow);
+}
+
+.ed-back {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    background: var(--admin-blue);
+    color: #fff;
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-size: 1.3rem;
+}
+
+.ed-title {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* --- Sidens indstillinger ------------------------------------------ */
+
+.ed-settings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--admin-surface);
+    border-top: 1px solid #e2e6ea;
+}
+
+.ed-field {
+    margin: 0;
+    display: grid;
+    gap: 0.25rem;
+}
+
+.ed-field label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--admin-muted);
+}
+
+.ed-field input,
+.ed-field select,
+.ed-field textarea {
+    padding: 0.5rem 0.6rem;
+    font: inherit;
+    border: 1px solid #c7ccd3;
+    border-radius: var(--radius);
+    background: #fff;
+}
+
+.ed-field input[type='color'] {
+    padding: 2px;
+    height: 2.4rem;
+    inline-size: 4rem;
+    cursor: pointer;
+}
+
+/* --- Lærredet ------------------------------------------------------ */
+
+.ed-canvas {
+    display: grid;
+    gap: 1.5rem;
+    padding: 2rem 1.5rem;
+}
+
+/* Den grå ramme om hver sektion, som i Figma-designet. */
+.ed-block {
+    position: relative;
+    background: var(--admin-surface);
+    border: 1px solid #cfd5db;
+    border-radius: var(--radius);
+    padding: 1.25rem 0.75rem 0.75rem;
+}
+
+.ed-block__label {
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    padding: 0 0.5rem;
+    background: var(--admin-surface);
+    font-size: 0.8rem;
+    color: var(--admin-muted);
+}
+
+.ed-block__actions {
+    position: absolute;
+    top: -0.9rem;
+    right: 0.75rem;
+    display: flex;
+    gap: 0.3rem;
+}
+
+.ed-btn {
+    width: 1.8rem;
+    height: 1.8rem;
+    border: 0;
+    border-radius: var(--radius);
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.85rem;
+    line-height: 1;
+    background: var(--admin-blue);
+}
+
+.ed-btn--edit {
+    background: var(--admin-success);
+}
+
+.ed-btn--delete {
+    background: var(--admin-danger);
+}
+
+.ed-btn:hover {
+    filter: brightness(1.12);
+}
+
+/* Blokkens indhold vises præcis som på den færdige side.
+   pointer-events slår links og knapper fra, så et klik i
+   forhåndsvisningen ikke navigerer væk fra editoren. */
+.ed-block__preview > * {
+    pointer-events: none;
+}
+
+/* --- Redigeringspanel ---------------------------------------------- */
+
+.ed-panel {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #cfd5db;
+}
+
+.ed-group {
+    margin: 0 0 1rem;
+    padding: 0.75rem 1rem 1rem;
+    border: 1px solid #e2e6ea;
+    border-radius: var(--radius);
+}
+
+.ed-group legend {
+    padding: 0 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--admin-muted);
+}
+
+/* Felterne flyder side om side, som knapperækken i mockup'en. */
+.ed-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+}
+
+.ed-group legend {
+    width: 100%;
+}
+
+.ed-panel .ed-field {
+    flex: 1 1 14rem;
+}
+
+.ed-panel textarea {
+    width: 100%;
+    resize: vertical;
+}
+
+/* --- Tilføj sektion ------------------------------------------------ */
+
+.ed-add {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+    padding: 0 1.5rem;
+}
+
+.ed-add__toggle {
+    width: 2.8rem;
+    height: 2.8rem;
+    border: 2px dashed var(--admin-orange);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--admin-orange);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.ed-add__toggle:hover {
+    background: rgb(232 161 93 / 0.12);
+}
+
+.ed-add__menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: var(--admin-surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.ed-add__choice {
+    padding: 0.5rem 1.1rem;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--admin-orange);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* --- Fast footer --------------------------------------------------- */
+
+.ed-footer {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 0.9rem 1.5rem;
+    background: var(--admin-surface);
+    box-shadow: 0 -2px 8px rgb(0 0 0 / 0.1);
+}
+
+.ed-status {
+    margin-right: auto;
+    font-size: 0.9rem;
+    color: var(--admin-muted);
+}
+
+/* Gem-knappen er dæmpet, indtil noget er ændret. */
+#save-btn:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+/* Og lyser op, så snart der er ugemt arbejde. */
+#save-btn.is-dirty {
+    animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    50% {
+        box-shadow: 0 0 0 5px rgb(232 161 93 / 0.35);
+    }
+}
+
+/* Respekterer systemindstillingen for reduceret bevægelse. */
+@media (prefers-reduced-motion: reduce) {
+    #save-btn.is-dirty {
+        animation: none;
+        outline: 2px solid var(--admin-orange);
+        outline-offset: 2px;
+    }
+}
+
+/* --- Repeater-felter (punktlister, links) --------------------------- */
+
+.ed-repeater {
+    flex: 1 1 100%;
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 1px dashed #cfd5db;
+    border-radius: var(--radius);
+}
+
+.ed-repeater__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--admin-muted);
+}
+
+.ed-repeater__rows {
+    display: grid;
+    gap: 0.4rem;
+}
+
+.ed-row {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.ed-row input,
+.ed-row textarea {
+    flex: 1;
+    padding: 0.45rem 0.6rem;
+    font: inherit;
+    border: 1px solid #c7ccd3;
+    border-radius: var(--radius);
+}
+
+.ed-repeater__add {
+    justify-self: start;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--admin-orange);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--admin-orange);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.ed-repeater__add:hover {
+    background: rgb(232 161 93 / 0.12);
+}
