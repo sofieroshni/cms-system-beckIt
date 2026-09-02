@@ -90,5 +90,6 @@ $blocks = $stmt->get_result();
             <button type="submit">+ Tilføj sektion</button>
         </form>
     </div>
+   <button class="cta-btn"><a href="index.php">tilbage til dine sider index.php</a><button>
 </body>
 </html>

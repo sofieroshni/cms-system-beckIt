@@ -54,7 +54,6 @@ $templates = mysqli_query($connection, "SELECT * FROM page_templates ORDER BY id
     <title>Opret side</title>
 </head>
 <body>
-    <?php include('../blocks/Navbar.php'); ?>
 
     <h1>Opret ny side</h1>
     <form method="POST">

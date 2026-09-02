@@ -1,15 +1,38 @@
 /*general rules */
 * {
-  border: box 0;
+  box-sizing: border-box 0;
   padding: 0;
   margin: 0;
 }
 
-/* 
-h1{
+:root {
+    --blue: #5271AC;
+    --active: #F0AD72;
+    --basic: #E4E4E4;
+    --black: #363434;
+    --published: #68B335;
+    --unpublished: #4B799A;
+}
+body{
+  background-color: var(--basic);
+  /* height: 4664px; */
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
-font-family: 'Jost' Bold 20px;
-} */
+p{
+   font-family: 'Jost', sans-serif;
+
+}
+h3{
+     font-family: 'inter', sans-serif;
+     font-size:20px;
+
+
+}
 a{
  font-family: 'Jost', sans-serif;
 color:white;
@@ -24,4 +47,144 @@ text-decoration: none;
 font-weight:200;
 
 }
+.admin-h1{
+   font-family: 'Jost', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    color: var(--black);
+    margin-bottom: 50px;
 
+}
+
+
+/* /STYLINGEN PÅ AMDIN/INDEX.PHP ACA. MINE SIDER/ */
+.admin-section{
+  /* width:848px; !GØR KHALID OPMÆRSOM PÅ DETTE */
+  width:848px;
+  margin-top:124px;
+  padding-left:280px; /*DISKUTER MED KHALID OM PADDINGEN NÅR HAN ER BLEVET NORMAL*/
+/* background-color:yellow; */
+}
+
+ul{
+
+  list-style-type:none;
+}
+/* hver hvid bjælke på admin/index.php* admin-panel*/
+.bjælker{
+  /* listen med alle bjækerne */
+  
+}
+.bjælke.orange{
+
+}
+.bjælke{
+  /* background-color:blue; */
+  border-radius:5px;
+  background-color:white;
+  height:56px;
+box-shadow: 0 4px 12px 2px rgba(0, 0, 0, 0.25);
+
+display:flex;
+justify-content: space-between;
+text-align: center;
+flex-direction: row;
+padding:0px;;
+margin:0px;
+margin-bottom:8px; //**spørg Khalid igen om margin-forhold**//
+margin-top:8px;
+padding-right:8px;
+align-items:center;
+}
+/* //HALVUSYNLIGE BLÆLKER */
+.bjælke.orange{
+  
+}
+.bjælke >h3{
+
+}
+.move-dots{
+  color: rgb(14, 11, 11);
+  font-size:15px;
+  background-color: red;
+  width: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: var(--blue);
+  border-radius:5px;
+  color:white;
+  height:100%;
+}
+
+
+          /* venstre side af bjælken med blå boks med prikker+ sidens titel (h3') */
+          .left-side{
+              height:100%;
+              padding:0px;
+              margin:0px;
+
+              display:flex;
+              flex-direction:row;
+              align-items: center;
+              justify-content:space-between;
+              width:30%;
+              /* background-color:brown; */
+
+          }
+          .left-side> h3{
+            padding-left:8px;
+          }
+
+          /* //højre side af bjæken med edit og alle de andr eikoner */
+          .icons{
+              /* background-color:pink; */
+              display:flex;
+              width:150px ;
+              justify-content: space-between;
+              text-align:center;
+              align-items:center;
+
+
+          }
+.status{
+    background-color: #020202;
+     font-family: 'Jost', sans-serif; /*spørg khalid om det inter eller jost!**/
+     color: white;
+     width:54px;
+     border-radius:15px;
+     padding:8px;
+     font-size:12px;
+     margin-right:8px;
+
+}
+.status.published{
+  background-color: var(--published);
+}
+.status.unpublished{
+  background-color: var(--unpublished);
+}
+
+/* ///slet og rediger knapper */
+.delete{
+  background-color:#FA5E60;
+   
+  color:white;
+  width: 20px;
+  height:20px  ;
+  border:none;
+  font-size:12px;
+  font-color:white;
+  border-radius:2px;
+}
+.rediger{
+  background-color:#5271AC;
+  color:white;
+  width: 20px;
+  height:20px  ;
+  border:none;
+  font-size:12px;
+  font-color:white;
+  border-radius:2px;
+}
