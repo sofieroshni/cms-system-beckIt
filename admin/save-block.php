@@ -10,11 +10,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $blockId = (int)$_POST['block_id'];
 $pageId  = (int)$_POST['page_id'];
 
-// Hent blokken, så vi ved hvilken type den er
-$stmt = $connection->prepare("SELECT block_type FROM page_blocks WHERE id = ?");
+
+// Hent både type OG nuværende settings
+$stmt = $connection->prepare("SELECT block_type, settings FROM page_blocks WHERE id = ?");
 $stmt->bind_param('i', $blockId);
 $stmt->execute();
 $block = $stmt->get_result()->fetch_assoc();
+
+$settings = json_decode($block['settings'], true) ?? [];
+
+
 
 if (!$block) {
     die('Blokken blev ikke fundet.');
@@ -28,9 +33,10 @@ if (!$className) {
 $schema = $className::getSchema();
 
 // Byg settings-array ud fra KUN de felter, skemaet tillader
-$settings = [];
 foreach ($schema as $fieldName => $fieldConfig) {
-    $settings[$fieldName] = $_POST[$fieldName] ?? '';
+    if (array_key_exists($fieldName, $_POST)) {   // kun hvis feltet faktisk kom med
+        $settings[$fieldName] = $_POST[$fieldName];
+    }
 }
 
 // Gem som JSON i databasen

@@ -26,29 +26,6 @@ $blocks = $stmt->get_result();
 </head>
 <body>
     
-    <!-- Sidens indstillinger -->
-    <form method="POST" action="save-page.php" class="page-settings">
-        <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
-
-        <label>Titel:
-            <input type="text" name="title" value="<?= htmlspecialchars($page['title']) ?>" required>
-        </label>
-
-        <label>Slug:
-            <input type="text" name="slug" value="<?= htmlspecialchars($page['slug']) ?>" required>
-        </label>
-
-        <label>Status:
-            <select name="status">
-                <option value="draft" <?= $page['status'] === 'draft' ? 'selected' : '' ?>>Kladde</option>
-                <option value="published" <?= $page['status'] === 'published' ? 'selected' : '' ?>>Udgivet</option>
-            </select>
-        </label>
-
-        <button type="submit">Gem sideindstillinger</button>
-    </form>
-    <hr>
-
 
     <h1>Redigerer: <?= htmlspecialchars($page['title']) ?></h1>
 
