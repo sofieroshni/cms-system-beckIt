@@ -4,6 +4,7 @@ require_once __DIR__ . '/../blocks/Hero.php';
 require_once __DIR__ . '/../blocks/TextArea.php';
 require_once __DIR__ . '/../blocks/Gallery.php';
 require_once __DIR__ . '/../blocks/Image.php';
+require_once __DIR__ . '/../blocks/Navbar.php';
 
 class BlockRegistry {
     // Kortet mellem "navnet" gemt i databasen og selve PHP-klassen
@@ -12,6 +13,7 @@ class BlockRegistry {
         'textarea' => 'TextAreaBlock',
         'gallery'  => 'GalleryBlock',
         'image'    => 'ImageBlock',
+        'navbar'   => 'NavbarBlock',
     ];
 
     // Slår en enkelt bloktype op, fx BlockRegistry::get('hero') -> "HeroBlock"
