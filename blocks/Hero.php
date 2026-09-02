@@ -43,7 +43,7 @@ class HeroBlock implements BlockInterface {
 
             background-size: cover;
             background-position: center;
-            height: 58px;
+            height: 338px;
                 
            }
            h1{color:white;

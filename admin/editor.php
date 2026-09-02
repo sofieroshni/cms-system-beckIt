@@ -23,6 +23,7 @@ $blocks = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <title>Rediger: <?= htmlspecialchars($page['title']) ?></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
     
@@ -63,10 +64,12 @@ $blocks = $stmt->get_result();
                 <span class="section-label"><?= htmlspecialchars($block['block_type']) ?></span>
 
                     <form method="POST" action="delete-block.php" class="delete-form"
-                    onsubmit="return confirm('Er du sikker på, du vil slette denne blok?');">
+                 >
                     <input type="hidden" name="block_id" value="<?= (int)$block['id'] ?>">
                     <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
-                    <button type="submit" class="delete-btn">✕</button>
+                    <button type="submit" class="delete-button">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
                 </form>
 
                 <div class="section-preview">
@@ -116,3 +119,19 @@ $blocks = $stmt->get_result();
    <button class="cta-btn"><a href="index.php">tilbage til dine sider index.php</a><button>
 </body>
 </html>
+<style>
+    .delete-button {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        z-index: 10;
+        color:red;
+        font-size: 20px;
+    }
+    .fa-circle-xmark{
+        background-color:transparent;
+
+        
+    }
+</style>
