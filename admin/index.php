@@ -19,8 +19,10 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
         <h1 class="admin-h1">Dine sider</h1>
 
     <ul class="bjælker" >
-        <?php while ($page = mysqli_fetch_assoc($result)): ?>
-            <li class="bjælke">
+        <?php while ($page = mysqli_fetch_assoc($result)): ?> 
+            <li class="bjælke" >
+
+            
                 <div class="left-side"  >  <div class="move-dots"> <p >:::</p></div>
                                     <h3 class="page-title">  <?= htmlspecialchars($page['title']) ?></h3></div>
               
@@ -31,6 +33,7 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
             <?php else: ?>
                 <p class="status unpublished">Kladde</p>
             <?php endif; ?>
+            
                                     
               <a href="editor.php?page_id=<?= (int)$page['id'] ?>">  <button class="rediger">
                  

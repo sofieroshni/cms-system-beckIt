@@ -27,7 +27,7 @@ $blocks = $stmt->get_result();
 </head>
 <body>
     
-    <!-- Sidens indstillinger -->
+    <!-- Sidens indstillinger  i toppen-->
     <form method="POST" action="save-page.php" class="page-settings">
         <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
 
@@ -36,7 +36,7 @@ $blocks = $stmt->get_result();
         </label>
 
         <label>Slug:
-            <input type="text" name="slug" value="<?= htmlspecialchars($page['slug']) ?>" required>
+            <input type="text" name="slug"  value="<?= htmlspecialchars($page['slug']) ?>" required>
         </label>
 
         <label>Status:
@@ -128,10 +128,15 @@ $blocks = $stmt->get_result();
         z-index: 10;
         color:red;
         font-size: 20px;
+        position:absolute;
+        margin-top:-10px;
+        margin-left: 10px;
     }
     .fa-circle-xmark{
         background-color:transparent;
+        
 
         
     }
+    form{}
 </style>
