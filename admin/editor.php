@@ -1,7 +1,7 @@
 <?php
 require_once '../include/database.php';
 require_once '../core/BlockRegistry.php';
-
+require_once '../components/Footer.php';
 $pageId = isset($_GET['page_id']) ? (int)$_GET['page_id'] : 0;
 
 $stmt = $connection->prepare("SELECT * FROM pages WHERE id = ?");
@@ -53,7 +53,7 @@ $blocks = $stmt->get_result();
 
     <h1>Redigerer: <?= htmlspecialchars($page['title']) ?></h1>
 
-    <div class="editor-sections">
+    <div class="editor-sections" style="background-color: yellow;">
         <?php while ($block = mysqli_fetch_assoc($blocks)): ?>
             <?php
                 $className = BlockRegistry::get($block['block_type']);
@@ -61,7 +61,7 @@ $blocks = $stmt->get_result();
                 $schema    = $className ? $className::getSchema() : [];
             ?>
             <div class="editor-section" data-block-id="<?= (int)$block['id'] ?>">
-                <span class="section-label"><?= htmlspecialchars($block['block_type']) ?></span>
+                <span class="section-label" class="editor-sections" style="background-color: purple;"><?= htmlspecialchars($block['block_type']) ?></span>
 
                     <form method="POST" action="delete-block.php" class="delete-form"
                  >
@@ -72,7 +72,7 @@ $blocks = $stmt->get_result();
                     </button>
                 </form>
 
-                <div class="section-preview">
+                <div class="section-preview" style="background-color: lightblue; padding: 10px; margin-bottom: 10px;">
                     <?= $className ? $className::render($data) : '(ukendt blok-type)' ?>
                 </div>
 

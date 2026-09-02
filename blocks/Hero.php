@@ -14,10 +14,10 @@ class HeroBlock implements BlockInterface {
 
     // Genererer den faktiske HTML til den offentlige side
     public static function render(array $data): string {
-        $title   = htmlspecialchars($data['title']   ?? '');
-        $address = htmlspecialchars($data['address'] ?? '');
-        $phone   = htmlspecialchars($data['phone']   ?? '');
-        $bg      = htmlspecialchars($data['bg_image'] ?? '');
+        $title   = htmlspecialchars($data['title']   ?: 'Bridge-navn');
+        $address = htmlspecialchars($data['address'] ?: 'adresse');
+        $phone   = htmlspecialchars($data['phone']   ?: 'telefon');
+        $bg      = htmlspecialchars($data['bg_image'] ?: 'vælg billede');
 
         return "
             <section class='hero' style=\"background-image:url('{$bg}')\">
@@ -31,7 +31,11 @@ class HeroBlock implements BlockInterface {
                    
             </section>
      <style>
-     
+    *{
+     padding:0px;
+     margin:0px;
+     overflow-x:hidden;
+     }
         .hero {
             
             font-family: 'Jost', sans-serif;
@@ -44,6 +48,9 @@ class HeroBlock implements BlockInterface {
             background-size: cover;
             background-position: center;
             height: 338px;
+            width:100vw;
+            padding: 16px;
+            margin:0px;
                 
            }
            h1{color:white;

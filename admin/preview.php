@@ -58,7 +58,10 @@ $blocks = $stmt->get_result();
         <?php endif; ?>
 
     <?php endwhile; ?>
-
+<footer>
+    <a href="editor.php?page_id=<?= (int)$page['id'] ?>">Rediger</a>
+    
+</footer>
 </body>
 
 </html>
