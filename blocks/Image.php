@@ -10,7 +10,7 @@ class ImageBlock implements BlockInterface {
     }
 
     public static function render(array $data): string {
-        $src = htmlspecialchars($data['src'] ?? '');
+        $src = htmlspecialchars($data['src']['src'] ?? '');
         $alt = htmlspecialchars($data['alt'] ?? '');
         return "<section class='image-block'><img src=\"{$src}\" alt=\"{$alt}\"></section>";
     }
