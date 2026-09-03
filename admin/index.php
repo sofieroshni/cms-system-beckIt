@@ -100,6 +100,7 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
 </section>
 
 
+
 <style>
 
 .addpage {

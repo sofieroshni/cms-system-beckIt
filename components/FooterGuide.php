@@ -1,4 +1,3 @@
-include 'style.css';
 
 <footer>
 
@@ -128,7 +127,10 @@ function hej() {
 }
 
 @keyframes fadeIn {
-    from { opacity: 10%; transform: translateY(10px); }
-    to { opacity: 100%; transform: translateY(0); }
+    from { opacity: 10%;
+    transform: translateY(10px); }
+    to { opacity: 100%; 
+    transform: translateY(0); 
+}
 }
 </style>
