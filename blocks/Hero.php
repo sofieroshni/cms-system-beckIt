@@ -49,7 +49,7 @@ class HeroBlock implements BlockInterface {
         $title   = htmlspecialchars($data['title'] ?? 'Bridge-navn');
         $address = htmlspecialchars($data['address'] ?? 'adresse');
         $phone   = htmlspecialchars($data['phone'] ?? 'telefon');
-        $bg      = htmlspecialchars($data['bg_image'] ?? '');
+        $bg      = htmlspecialchars($data['bg_image'] ?? '/assets/images/no-image.jpg');
 
         // Styling defaults
         $primaryColor = htmlspecialchars(

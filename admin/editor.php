@@ -1,142 +1,52 @@
 <?php
 require_once '../include/database.php';
 require_once '../core/BlockRegistry.php';
-// require_once '../components/FooterButtons.php';
-$pageId = isset($_GET['page_id']) ? (int)$_GET['page_id'] : 0;
+require_once '../include/upload-helper.php';
 
-$stmt = $connection->prepare("SELECT * FROM pages WHERE id = ?");
-$stmt->bind_param('i', $pageId);
-$stmt->execute();
-$page = $stmt->get_result()->fetch_assoc();
-
-if (!$page) {
-    die('Siden blev ikke fundet.');
+// Kun POST-requests må gemme data
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    die('Ugyldig forespørgsel.');
 }
 
-$stmt = $connection->prepare("SELECT * FROM page_blocks WHERE page_id = ? ORDER BY sort_order ASC");
-$stmt->bind_param('i', $pageId);
+$blockId = (int)$_POST['block_id'];
+$pageId  = (int)$_POST['page_id'];
+
+// Hent blokken, så vi ved hvilken type den er
+$stmt = $connection->prepare("SELECT block_type FROM page_blocks WHERE id = ?");
+$stmt->bind_param('i', $blockId);
 $stmt->execute();
-$blocks = $stmt->get_result();
-?>
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <title>Rediger: <?= htmlspecialchars($page['title']) ?></title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-</head>
-<body>
-    
-    <!-- Sidens indstillinger  i toppen-->
-    <form method="POST" action="save-page.php" class="page-settings">
-        <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
+$block = $stmt->get_result()->fetch_assoc();
 
-        <label>Titel:
-            <input type="text" name="title" value="<?= htmlspecialchars($page['title']) ?>" required>
-        </label>
+if (!$block) {
+    die('Blokken blev ikke fundet.');
+}
 
-        <label>Slug:
-            <input type="text" name="slug"  value="<?= htmlspecialchars($page['slug']) ?>" required>
-        </label>
+// Slå klassen op og hent dens skema
+$className = BlockRegistry::get($block['block_type']);
+if (!$className) {
+    die('Ukendt bloktype.');
+}
+$schema = $className::getSchema();
 
-        <label>Status:
-            <select name="status">
-                <option value="draft" <?= $page['status'] === 'draft' ? 'selected' : '' ?>>Kladde</option>
-                <option value="published" <?= $page['status'] === 'published' ? 'selected' : '' ?>>Udgivet</option>
-            </select>
-        </label>
-
-        <button type="submit">Gem sideindstillinger</button>
-    </form>
-    <hr>
-
-
-    <h1>Redigerer: <?= htmlspecialchars($page['title']) ?></h1>
-
-    <div class="editor-sections" style="background-color: yellow;">
-        <?php while ($block = mysqli_fetch_assoc($blocks)): ?>
-            <?php
-                $className = BlockRegistry::get($block['block_type']);
-                $data      = json_decode($block['settings'], true) ?? [];
-                $schema    = $className ? $className::getSchema() : [];
-            ?>
-            <div class="editor-section" data-block-id="<?= (int)$block['id'] ?>">
-                <span class="section-label" class="editor-sections" style="background-color: purple;"><?= htmlspecialchars($block['block_type']) ?></span>
-
-                    <form method="POST" action="delete-block.php" class="delete-form"
-                 >
-                    <input type="hidden" name="block_id" value="<?= (int)$block['id'] ?>">
-                    <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
-                    <button type="submit" class="delete-button">
-                        <i class="fa-solid fa-circle-xmark"></i>
-                    </button>
-                </form>
-
-                <div class="section-preview" style="background-color: lightblue; padding: 10px; margin-bottom: 10px;">
-                    <?= $className ? $className::render($data) : '(ukendt blok-type)' ?>
-                </div>
-
-                <form method="POST" action="save-block.php" class="block-form">
-                    <input type="hidden" name="block_id" value="<?= (int)$block['id'] ?>">
-                    <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
-
-                    <?php foreach ($schema as $fieldName => $fieldConfig): ?>
-                        <label>
-                            <?= htmlspecialchars($fieldConfig['label']) ?>:
-                            <?php if ($fieldConfig['type'] === 'richtext'): ?>
-                                <textarea name="<?= htmlspecialchars($fieldName) ?>"><?= htmlspecialchars($data[$fieldName] ?? '') ?></textarea>
-                            <?php else: ?>
-                                <input type="text"
-                                       name="<?= htmlspecialchars($fieldName) ?>"
-                                       value="<?= htmlspecialchars($data[$fieldName] ?? '') ?>">
-                            <?php endif; ?>
-                        </label><br>
-                    <?php endforeach; ?>
-
-                    <button type="submit">Gem</button>
-                </form>
-            </div>
-            <hr>
-        <?php endwhile; ?>
-    </div>
-
-    <!-- Tilføj ny blok -->
-    <div class="add-block">
-        <form method="POST" action="add-block.php">
-            <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
-
-            <select name="block_type">
-                <?php foreach (BlockRegistry::all() as $type => $class): ?>
-                    <option value="<?= htmlspecialchars($type) ?>">
-                        <?= htmlspecialchars(ucfirst($type)) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-
-            <button type="submit">+ Tilføj sektion</button>
-        </form>
-    </div>
-   <button class="cta-btn"><a href="index.php">tilbage til dine sider index.php</a><button>
-</body>
-</html>
-<style>
-    .delete-button {
-        background: none;
-        border: none;
-        color: white;
-        cursor: pointer;
-        z-index: 10;
-        color:red;
-        font-size: 20px;
-        position:absolute;
-        margin-top:-10px;
-        margin-left: 10px;
+// Byg settings-array ud fra KUN de felter, skemaet tillader
+$settings = [];
+foreach ($schema as $fieldName => $fieldConfig) {
+    if ($fieldConfig['type'] === 'image') {
+        $uploaded = isset($_FILES[$fieldName . '_file'])
+            ? handle_image_upload($_FILES[$fieldName . '_file'])
+            : null;
+        $settings[$fieldName] = $uploaded ? $uploaded['src'] : ($_POST[$fieldName] ?? '');
+        continue;
     }
-    .fa-circle-xmark{
-        background-color:transparent;
-        
+    $settings[$fieldName] = $_POST[$fieldName] ?? '';
+}
 
-        
-    }
-    form{}
-</style>
+// Gem som JSON i databasen
+$json = json_encode($settings);
+$stmt = $connection->prepare("UPDATE page_blocks SET settings = ? WHERE id = ?");
+$stmt->bind_param('si', $json, $blockId);
+$stmt->execute();
+
+// Send brugeren tilbage til editoren
+header('Location: editor.php?page_id=' . $pageId);
+exit;
