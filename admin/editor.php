@@ -1,7 +1,7 @@
 <?php
 require_once '../include/database.php';
 require_once '../core/BlockRegistry.php';
-
+require_once '../components/FooterButtons.php';
 $pageId = isset($_GET['page_id']) ? (int)$_GET['page_id'] : 0;
 
 $stmt = $connection->prepare("SELECT * FROM pages WHERE id = ?");

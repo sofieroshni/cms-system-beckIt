@@ -32,6 +32,8 @@ class NavbarBlock implements BlockInterface {
             </nav>
             <style>
             .navbar {
+                font-family: 'Jost', sans-serif;
+
                 background-color: #1e2a6e;
                 display: flex;
                 align-items: center;
