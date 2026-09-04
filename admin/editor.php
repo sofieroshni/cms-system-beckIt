@@ -2,6 +2,7 @@
 require_once '../include/database.php';
 require_once '../core/BlockRegistry.php';
 require_once '../include/upload-helper.php';
+$pageId = isset($_GET['page_id']) ? (int)$_GET['page_id'] : 0;
 
 // Kun POST-requests må gemme data
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
