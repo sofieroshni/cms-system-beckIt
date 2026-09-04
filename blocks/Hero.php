@@ -46,18 +46,18 @@ class HeroBlock implements BlockInterface {
     public static function render(array $data): string {
 
         // Content defaults
-        $title   = htmlspecialchars($data['title'] ?? 'Bridge-navn');
-        $address = htmlspecialchars($data['address'] ?? 'adresse');
-        $phone   = htmlspecialchars($data['phone'] ?? 'telefon');
-        $bg      = htmlspecialchars($data['bg_image'] ?? '/assets/images/no-image.jpg');
+        $title   = htmlspecialchars($data['title'] ?: 'Bridge-navn');
+        $address = htmlspecialchars($data['address'] ?: 'adresse');
+        $phone   = htmlspecialchars($data['phone'] ?: 'telefon');
+        $bg      = htmlspecialchars($data['bg_image'] ?: '/assets/images/no-image.jpg');
 
         // Styling defaults
         $primaryColor = htmlspecialchars(
-            $data['primary_color'] ?? '#213377'
+            $data['primary_color'] ?: '#213377'
         );
 
         $textColor = htmlspecialchars(
-            $data['text_color'] ?? '#ffffff'
+            $data['text_color'] ?: '#ffffff'
         );
 
 
