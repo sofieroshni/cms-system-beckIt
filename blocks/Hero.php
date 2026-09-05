@@ -50,6 +50,7 @@ class HeroBlock implements BlockInterface {
         $address = htmlspecialchars($data['address'] ?: 'adresse');
         $phone   = htmlspecialchars($data['phone'] ?: 'telefon');
         $bg      = htmlspecialchars($data['bg_image'] ?: '/assets/images/no-image.jpg');
+        
 
         // Styling defaults
         $primaryColor = htmlspecialchars(

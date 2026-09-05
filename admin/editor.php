@@ -68,18 +68,18 @@ $blocks = $stmt->get_result();
                 <div class="editor-section" data-block-id="<?= $blockId ?>">
 <a href="delete-block.php?block_id=<?= $blockId ?>&page_id=<?= (int)$page['id'] ?>"
                        class="delete-button"
-                       onclick="return confirm('Slet denne blok?')">
+                     >
                         <i class="fa-solid fa-circle-xmark"></i>
                     </a>
                     
                     <span class="section-label"><?= htmlspecialchars($block['block_type']) ?></span>
 
-                    <div class="section-preview">
+                    <div class="section-preview" onClick="editFunction">
                         <?= $className ? $className::render($data) : '(ukendt blok-type)' ?>
                     </div>
-
+<div class="input-felter" id="inputfelter">
                     <?php foreach ($schema as $fieldName => $fieldConfig): ?>
-                        <label>
+                  <div class="label-name">     <label class="label">
                             <?= htmlspecialchars($fieldConfig['label']) ?>:
                             <?php if ($fieldConfig['type'] === 'richtext'): ?>
                                 <textarea name="blocks[<?= $blockId ?>][<?= htmlspecialchars($fieldName) ?>]"><?= htmlspecialchars($data[$fieldName] ?? '') ?></textarea>
@@ -88,16 +88,15 @@ $blocks = $stmt->get_result();
                                        name="blocks[<?= $blockId ?>][<?= htmlspecialchars($fieldName) ?>]"
                                        value="<?= htmlspecialchars($data[$fieldName] ?? '') ?>">
                             <?php endif; ?>
-                        </label><br>
-                    <?php endforeach; ?>
+                        </label></div><br>
+                    <?php endforeach; ?></div>
                 </div>
                 <hr>
             <?php endwhile; ?>
-        </div>
+        </div> 
     </form>
-    <!-- ====== all-blocks-form slutter her — resten er UDENFOR den ====== -->
 
-    <!-- Tilføj ny blok (egen form, ligger nu KUN én gang, uden for while-loopet) -->
+    <!-- Tilføj ny blok (egen form, ligger  uden for while-loopet) -->
     <div class="add-block">
        <form method="POST" action="add-block.php">
         <input type="hidden" name="page_id" value="<?=  (int)$page['id']?>">
@@ -140,6 +139,7 @@ $blocks = $stmt->get_result();
         text-align:center;
         width:100%;
         align-items:center;
+        margin-bottom: 110px;
 
     }
     body {
@@ -175,9 +175,8 @@ $blocks = $stmt->get_result();
     }
     .delete-button {
    color:red;
-    z-index: 99;
     padding-right:100%;
-    z-index:99;
+    z-index:1;
     top:0;
     position:absolute;
 
@@ -203,33 +202,88 @@ $blocks = $stmt->get_result();
         background-color: purple;
     }
     .editor-sections{
-        background-color: green;
+        background-color: blue;
         display:flex;
         justify-content:center;
         align-items:center;
         flex-direction:column;
         width:100%;
     }
+    /* //stribede bokse */
     .editor-section{
-        background-color: white;
-        border:#C7C6C6 10px solid;
-        border-radius: 1px;
+        border:#C7C6C6 3px  dashed;
+        border-radius: 5px;
         display:flex;
         justify-content:center;
         align-items:center;
         flex-direction:column;
         width:80%;
         z-index:0!important;
-        position: relative;
+        position:relative;
+        margin-top: 100px;
+        
+    }
+    
+    /* //her ligge ALLE inputfelterne den skal skjules og vise */
+    .input-felter{
+        background-color:black;
+        display:flex;
+        justify-content:space-around; 
+        align-items:center;
+     
+        width:100%; 
+        padding-top:20px;
+        padding-bottom:20px;
 
 
         
-        margin-top: 10px;
     }
-    label{
+    .input-felter.show{
+        display:flex
+    }
+  input[type="text"]{
+        height:10px;
+        border-radius:5px;
+        border:none;
+        height:30px;
+        background-color:#FBFBFB;
+        color: #4E4646;
+        font-size:12px;;
+        font-weight: 500;
+        width:auto;
+        overflow:visible;
+        margin:0px;
+        padding:0px;
+        height:50px;
+        
+
+    }
+    
+  
+    .label-name{
+        background-color:#5271AC;
+        color:white;
+        font-size: 30px;
+        font-weight:900;
+        padding:0px;
+        border-radius:5px;
+        
+
+    }
+    .label{
        font-family: 'Jost', sans-serif;
        font-size: 16px;
        color: var(--blue);
+    }
+    .section-label{
+        color:#C7C6C6;
+        position:absolute;
+        background-color:white;
+        z-index:20!important;
+        top:0;
+        padding:15px;
+        
+
     }
     .tilføj{
         background:none;
@@ -241,4 +295,18 @@ $blocks = $stmt->get_result();
         background-color:pink;
 
     }
+    .editor-section.selected {
+    border-color: orange;
+}
 </style>
+<script>
+
+    const editSection = document.querySelectorAll('.editor-section');
+
+    editSection.forEach(function(section) {
+        section.addEventListener('click', function() {
+            section.classList.toggle('selected');
+        });
+    });
+
+</script>
