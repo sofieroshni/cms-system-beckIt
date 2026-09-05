@@ -1,7 +1,7 @@
 <?php
 require_once '../include/database.php';
 require_once '../core/BlockRegistry.php';
-require_once '../components/FooterButtons.php';
+// require_once '../components/FooterButtons.php';
 $pageId = isset($_GET['page_id']) ? (int)$_GET['page_id'] : 0;
 
 $stmt = $connection->prepare("SELECT * FROM pages WHERE id = ?");
@@ -116,10 +116,47 @@ $blocks = $stmt->get_result();
             <button type="submit">+ Tilføj sektion</button>
         </form>
     </div>
-   <button class="cta-btn"><a href="index.php">tilbage til dine sider index.php</a><button>
+
+
+
+
+                    <footer>
+                    <div>
+                        <a class="btn" href="editor.php?page_id=<?= (int)$page['id'] ?>">
+                            <button class="btn">Forhåndsvisning</button>
+                        </a>
+                        <button class="btn cta">Publish</button>
+                        <button class="btn">Gem</button>
+                    </div>
+                        
+                        <a class="btn " href="editor.php?page_id=<?= (int)$page['id'] ?>">
+                            <button class="btn">
+
+                        </button
+                        ></a>
+                            <a class=" btn cta" href="preview.php?page_id=<?= (int)$page['id'] ?>">  
+                                <button class="btn"></button></a>
+                            <a>Publiser</a>
+
+
+                    </footer>
 </body>
 </html>
 <style>
+    button{
+        background-color:blue;
+        color:white;
+        border-radius:5px;
+        padding:10px;
+        margin:10px;
+    }
+    button.cta{
+        background-color:green;
+        color:white;
+        border-radius:5px;
+        padding:10px;
+        margin:10px;
+    }
     .delete-button {
         background: none;
         border: none;
@@ -138,5 +175,15 @@ $blocks = $stmt->get_result();
 
         
     }
-    form{}
+ footer{
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        height:100px;
+        background-color:lightblue;
+        bottom:0;
+       position:fixed;
+       width:100%;
+       background-color:red;
+    }
 </style>
