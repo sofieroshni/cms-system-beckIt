@@ -68,7 +68,8 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
                     <form method="POST"
                           action="delete-page.php"
                           style="display:inline;"
-                          onsubmit="return confirm('Slet siden og alle dens sektioner?');">
+                          >
+                          <!-- onsubmit="return confirm('Slet siden og alle dens sektioner?'); -->
 
                         <input type="hidden"
                                name="page_id"
