@@ -99,8 +99,19 @@ $blocks = $stmt->get_result();
 
     <!-- Tilføj ny blok (egen form, ligger nu KUN én gang, uden for while-loopet) -->
     <div class="add-block">
-       <form method="POST">
-        
+       <form method="POST" action="add-block.php">
+        <input type="hidden" name="page_id" value="<?=  (int)$page['id']?>">
+                                <div class="buttons">
+                                   <?php foreach (BlockRegistry::all() as $type => $class): ?>
+                                    <!-- gemmer alle key som $type og key som $class -->
+                                    <button class="button orange" type="submit"
+                                     name="block_type" value="<?= (htmlspecialchars($type))?>" 
+                                     >
+                                     <?=  htmlspecialchars(ucfirst($type)) ?>
+                                    </button> 
+                                    <?php  endforeach; ?>
+                                </div>
+    </input>
     </form>
     </div>
 
