@@ -66,14 +66,13 @@ $blocks = $stmt->get_result();
                     $blockId   = (int)$block['id'];
                 ?>
                 <div class="editor-section" data-block-id="<?= $blockId ?>">
-                    <span class="section-label"><?= htmlspecialchars($block['block_type']) ?></span>
-
-                    <!-- Slet-knap: et LINK, ikke en form — så den kan ligge inde i all-blocks-form uden nested <form> -->
-                    <a href="delete-block.php?block_id=<?= $blockId ?>&page_id=<?= (int)$page['id'] ?>"
+<a href="delete-block.php?block_id=<?= $blockId ?>&page_id=<?= (int)$page['id'] ?>"
                        class="delete-button"
                        onclick="return confirm('Slet denne blok?')">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </a>
+                    
+                    <span class="section-label"><?= htmlspecialchars($block['block_type']) ?></span>
 
                     <div class="section-preview">
                         <?= $className ? $className::render($data) : '(ukendt blok-type)' ?>
@@ -174,15 +173,11 @@ $blocks = $stmt->get_result();
         margin-right: 10px;
     }
     .delete-button {
-        background: none;
-        border: none;
-        color: red;
-        cursor: pointer;
-        z-index: 10;
-        font-size: 20px;
-        position: absolute;
-        margin-top: -10px;
-        margin-left: 10px;
+    color:red;
+    z-index: 99;
+    padding-right:100%;
+    z-index:99;
+
     }
     .fa-circle-xmark {
         background-color: transparent;
@@ -215,13 +210,14 @@ $blocks = $stmt->get_result();
     .editor-section{
         background-color: white;
         border:#C7C6C6 10px solid;
-        border-radius: 5px;
-        padding: 10px;
+        border-radius: 1px;
         display:flex;
         justify-content:center;
         align-items:center;
         flex-direction:column;
         width:80%;
+        z-index:0;
+
         
         margin-top: 10px;
     }
