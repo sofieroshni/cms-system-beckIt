@@ -99,19 +99,9 @@ $blocks = $stmt->get_result();
 
     <!-- Tilføj ny blok (egen form, ligger nu KUN én gang, uden for while-loopet) -->
     <div class="add-block">
-        <form method="POST" action="add-block.php">
-            <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
-
-            <select name="block_type">
-                <?php foreach (BlockRegistry::all() as $type => $class): ?>
-                    <option value="<?= htmlspecialchars($type) ?>">
-                        <?= htmlspecialchars(ucfirst($type)) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-
-            <button type="submit">+ Tilføj sektion</button>
-        </form>
+       <form method="POST">
+        
+    </form>
     </div>
 
 </main>
@@ -173,10 +163,12 @@ $blocks = $stmt->get_result();
         margin-right: 10px;
     }
     .delete-button {
-    color:red;
+   color:red;
     z-index: 99;
     padding-right:100%;
     z-index:99;
+    top:0;
+    position:absolute;
 
     }
     .fa-circle-xmark {
@@ -216,7 +208,9 @@ $blocks = $stmt->get_result();
         align-items:center;
         flex-direction:column;
         width:80%;
-        z-index:0;
+        z-index:0!important;
+        position: relative;
+
 
         
         margin-top: 10px;
@@ -226,5 +220,14 @@ $blocks = $stmt->get_result();
        font-size: 16px;
        color: var(--blue);
     }
-    
+    .tilføj{
+        background:none;
+        color:white;
+        border:none;
+        
+    }
+    .add-block{
+        background-color:pink;
+
+    }
 </style>
