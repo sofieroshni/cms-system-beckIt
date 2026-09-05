@@ -10,11 +10,12 @@ class TextAreaBlock implements BlockInterface {
     }
 
     public static function render(array $data): string {
-        $content = htmlspecialchars($data['content'] ?? '');
+        $textArea = htmlspecialchars($data['content'] ?? 'Skriv den fulde tekst her...  ');
+        $title = htmlspecialchars($data['contentTitle'] ?? 'Skriv en titel her...');
         return "
         <section class='textarea-block'>
-        h2>{$data['contentTitle']}</h2>
-        <p>{$content}</p>
+        <h2>{$title}</h2>
+        <p>{$textArea}</p>
         </section>";
     }
 }

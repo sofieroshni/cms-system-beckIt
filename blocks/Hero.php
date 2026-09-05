@@ -24,7 +24,7 @@ class HeroBlock implements BlockInterface {
             'bg_image' => [
                 'type' => 'image',
                 'label' => 'Baggrundsbillede',
-                'default' => 'assets/images/no-image.jpg'
+                'default' => 'no-image.jpg'
             ],
 
             'primary_color' => [
@@ -59,8 +59,7 @@ class HeroBlock implements BlockInterface {
         $textColor = htmlspecialchars(
             $data['text_color'] ?: '#ffffff'
         );
-
-
+        $bg = htmlspecialchars($data['bg_image'] ?: '/assets/images/no-image.jpg');
         return "
             <section
                 class='hero'
@@ -76,7 +75,7 @@ class HeroBlock implements BlockInterface {
                     </h1>
                 </div>
 
-                <div class='hero-info'>
+                <div class='hero-info' s>
 
                     <span
                         style=\"

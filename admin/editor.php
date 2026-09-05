@@ -26,8 +26,9 @@ $blocks = $stmt->get_result();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
-
-    <!-- ====== Sideindstillinger (egen form, uafhængig af blokkene) ====== -->
+<main class="main-editor">
+    
+ <!-- ====== Sideindstillinger (egen form, uafhængig af blokkene) ====== -->
     <form method="POST" action="save-page.php" class="page-settings">
         <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
 
@@ -114,6 +115,9 @@ $blocks = $stmt->get_result();
         </form>
     </div>
 
+</main>
+   
+
     <footer>
         <div class="footer-buttons">
             <a class="btn" href="preview.php?page_id=<?= (int)$page['id'] ?>">
@@ -128,8 +132,20 @@ $blocks = $stmt->get_result();
 </body>
 </html>
 <style>
+    main.main-editor{
+        background-color: red;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        text-align:center;
+        width:100%;
+        align-items:center;
+
+    }
     body {
         font-family: 'Jost', sans-serif;
+        justify-content: center;
+        align-items: center;
     }
     a {
         text-decoration: none;
@@ -186,6 +202,33 @@ $blocks = $stmt->get_result();
         justify-content: end;
         align-items: center;
         width: 50%;
-        background-color: lightblue;
+        background-color: purple;
     }
+    .editor-sections{
+        background-color: green;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex-direction:column;
+        width:100%;
+    }
+    .editor-section{
+        background-color: white;
+        border:#C7C6C6 10px solid;
+        border-radius: 5px;
+        padding: 10px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex-direction:column;
+        width:80%;
+        
+        margin-top: 10px;
+    }
+    label{
+       font-family: 'Jost', sans-serif;
+       font-size: 16px;
+       color: var(--blue);
+    }
+    
 </style>

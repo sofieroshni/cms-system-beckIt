@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/BlockInterface.php';
-
+// 
 class NavbarBlock implements BlockInterface {
     // Beskriver hvilke felter admin-editoren skal vise, når man redigerer en Navbar-blok
     public static function getSchema(): array {
@@ -12,8 +12,8 @@ class NavbarBlock implements BlockInterface {
 
     // Genererer den faktiske HTML til den offentlige side
     public static function render(array $data): string {
-        $logo = htmlspecialchars($data['logo_image'] ?? '');
-        $raw  = $data['links'] ?? '';
+        $logo = htmlspecialchars($data['logo_image'] ?: '/assets/images/no-image.jpg');
+        $raw  = $data['links'] ?: 'test,test,test, test,test,test';
 
         $items = '';
         foreach (explode(',', $raw) as $pair) {
