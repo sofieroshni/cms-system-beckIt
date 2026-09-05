@@ -1,7 +1,7 @@
 <?php
 require_once '../include/database.php';
 require_once '../core/BlockRegistry.php';
-// require_once '../components/FooterButtons.php';
+
 $pageId = isset($_GET['page_id']) ? (int)$_GET['page_id'] : 0;
 
 $stmt = $connection->prepare("SELECT * FROM pages WHERE id = ?");
@@ -26,8 +26,8 @@ $blocks = $stmt->get_result();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
-    
-    <!-- Sidens indstillinger  i toppen-->
+
+    <!-- ====== Sideindstillinger (egen form, uafhængig af blokkene) ====== -->
     <form method="POST" action="save-page.php" class="page-settings">
         <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
 
@@ -36,7 +36,7 @@ $blocks = $stmt->get_result();
         </label>
 
         <label>Slug:
-            <input type="text" name="slug"  value="<?= htmlspecialchars($page['slug']) ?>" required>
+            <input type="text" name="slug" value="<?= htmlspecialchars($page['slug']) ?>" required>
         </label>
 
         <label>Status:
@@ -50,57 +50,54 @@ $blocks = $stmt->get_result();
     </form>
     <hr>
 
-
     <h1>Redigerer: <?= htmlspecialchars($page['title']) ?></h1>
 
-    <div class="editor-sections">
-        <?php while ($block = mysqli_fetch_assoc($blocks)): ?>
-            <?php
-                $className = BlockRegistry::get($block['block_type']);
-                $data      = json_decode($block['settings'], true) ?? [];
-                $schema    = $className ? $className::getSchema() : [];
-            ?>
-            <div class="editor-section" data-block-id="<?= (int)$block['id'] ?>">
-                <span class="section-label"><?= htmlspecialchars($block['block_type']) ?></span>
+    <!-- ====== Alle blokke i ÉN form — dette er "gem alt" ====== -->
+    <form method="POST" action="save-all-blocks.php" id="all-blocks-form">
+        <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
 
-                    <form method="POST" action="delete-block.php" class="delete-form"
-                 >
-                    <input type="hidden" name="block_id" value="<?= (int)$block['id'] ?>">
-                    <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
-                    <button type="submit" class="delete-button">
+        <div class="editor-sections">
+            <?php while ($block = mysqli_fetch_assoc($blocks)): ?>
+                <?php
+                    $className = BlockRegistry::get($block['block_type']);
+                    $data      = json_decode($block['settings'], true) ?? [];
+                    $schema    = $className ? $className::getSchema() : [];
+                    $blockId   = (int)$block['id'];
+                ?>
+                <div class="editor-section" data-block-id="<?= $blockId ?>">
+                    <span class="section-label"><?= htmlspecialchars($block['block_type']) ?></span>
+
+                    <!-- Slet-knap: et LINK, ikke en form — så den kan ligge inde i all-blocks-form uden nested <form> -->
+                    <a href="delete-block.php?block_id=<?= $blockId ?>&page_id=<?= (int)$page['id'] ?>"
+                       class="delete-button"
+                       onclick="return confirm('Slet denne blok?')">
                         <i class="fa-solid fa-circle-xmark"></i>
-                    </button>
-                </form>
+                    </a>
 
-                <div class="section-preview">
-                    <?= $className ? $className::render($data) : '(ukendt blok-type)' ?>
-                </div>
-
-                <form method="POST" action="save-block.php" class="block-form">
-                    <input type="hidden" name="block_id" value="<?= (int)$block['id'] ?>">
-                    <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
+                    <div class="section-preview">
+                        <?= $className ? $className::render($data) : '(ukendt blok-type)' ?>
+                    </div>
 
                     <?php foreach ($schema as $fieldName => $fieldConfig): ?>
                         <label>
                             <?= htmlspecialchars($fieldConfig['label']) ?>:
                             <?php if ($fieldConfig['type'] === 'richtext'): ?>
-                                <textarea name="<?= htmlspecialchars($fieldName) ?>"><?= htmlspecialchars($data[$fieldName] ?? '') ?></textarea>
+                                <textarea name="blocks[<?= $blockId ?>][<?= htmlspecialchars($fieldName) ?>]"><?= htmlspecialchars($data[$fieldName] ?? '') ?></textarea>
                             <?php else: ?>
                                 <input type="text"
-                                       name="<?= htmlspecialchars($fieldName) ?>"
+                                       name="blocks[<?= $blockId ?>][<?= htmlspecialchars($fieldName) ?>]"
                                        value="<?= htmlspecialchars($data[$fieldName] ?? '') ?>">
                             <?php endif; ?>
                         </label><br>
                     <?php endforeach; ?>
+                </div>
+                <hr>
+            <?php endwhile; ?>
+        </div>
+    </form>
+    <!-- ====== all-blocks-form slutter her — resten er UDENFOR den ====== -->
 
-                    <button type="submit">Gem</button>
-                </form>
-            </div>
-            <hr>
-        <?php endwhile; ?>
-    </div>
-
-    <!-- Tilføj ny blok -->
+    <!-- Tilføj ny blok (egen form, ligger nu KUN én gang, uden for while-loopet) -->
     <div class="add-block">
         <form method="POST" action="add-block.php">
             <input type="hidden" name="page_id" value="<?= (int)$page['id'] ?>">
@@ -117,73 +114,78 @@ $blocks = $stmt->get_result();
         </form>
     </div>
 
+    <footer>
+        <div class="footer-buttons">
+            <a class="btn" href="preview.php?page_id=<?= (int)$page['id'] ?>">
+                <button type="button" class="btn eye"><i class="fa-solid fa-eye"></i> Show</button>
+            </a>
+            <button type="button" class="btn cta">Publish</button>
 
-
-
-                    <footer>
-                    <div>
-                        <a class="btn" href="editor.php?page_id=<?= (int)$page['id'] ?>">
-                            <button class="btn">Forhåndsvisning</button>
-                        </a>
-                        <button class="btn cta">Publish</button>
-                        <button class="btn">Gem</button>
-                    </div>
-                        
-                        <a class="btn " href="editor.php?page_id=<?= (int)$page['id'] ?>">
-                            <button class="btn">
-
-                        </button
-                        ></a>
-                            <a class=" btn cta" href="preview.php?page_id=<?= (int)$page['id'] ?>">  
-                                <button class="btn"></button></a>
-                            <a>Publiser</a>
-
-
-                    </footer>
+            <!-- Denne knap submitter all-blocks-form selvom den ligger uden for den -->
+            <button type="submit" form="all-blocks-form" class="btn">Gem</button>
+        </div>
+    </footer>
 </body>
 </html>
 <style>
-    button{
-        background-color:blue;
-        color:white;
-        border-radius:5px;
-        padding:10px;
-        margin:10px;
+    body {
+        font-family: 'Jost', sans-serif;
     }
-    button.cta{
-        background-color:green;
-        color:white;
-        border-radius:5px;
-        padding:10px;
-        margin:10px;
+    a {
+        text-decoration: none;
+    }
+    button {
+        background-color: blue;
+        color: white;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px;
+        border: none;
+    }
+    button.cta {
+        background-color: green;
+        color: white;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px;
+        border: none;
+    }
+    button.eye {
+        display: flex;
+        align-items: center;
+    }
+    button.eye i {
+        margin-right: 10px;
     }
     .delete-button {
         background: none;
         border: none;
-        color: white;
+        color: red;
         cursor: pointer;
         z-index: 10;
-        color:red;
         font-size: 20px;
-        position:absolute;
-        margin-top:-10px;
+        position: absolute;
+        margin-top: -10px;
         margin-left: 10px;
     }
-    .fa-circle-xmark{
-        background-color:transparent;
-        
-
-        
+    .fa-circle-xmark {
+        background-color: transparent;
     }
- footer{
+    footer {
         display: flex;
-        justify-content: center;
+        justify-content: end;
         margin-top: 20px;
-        height:100px;
-        background-color:lightblue;
-        bottom:0;
-       position:fixed;
-       width:100%;
-       background-color:red;
+        height: 100px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: red;
+    }
+    .footer-buttons {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        width: 50%;
+        background-color: lightblue;
     }
 </style>
