@@ -122,7 +122,7 @@ $blocks = $stmt->get_result();
     </form>
     </div>
     
-    </div>
+    ></div>
     
 </div>
     <!-- Tilføj ny blok (egen form, ligger  uden for while-loopet) -->
@@ -189,15 +189,20 @@ $blocks = $stmt->get_result();
     }
     .delete-button {
    color:red;
-    z-index:1;
-    top:10;
+    z-index: 9999;
     position:absolute;
-    font-size:100px;
-    left:-10px;
+    font-size:22px;
+    top:-10px;
+    left:0px;
+    overflow-x:visible;
+    width:20px;
+    height:20px;
+
+
 
     }
     .fa-circle-xmark {
-        background-color: transparent;
+       color:
 
     }
     footer {
@@ -258,28 +263,15 @@ $blocks = $stmt->get_result();
         
     }
     .input-felter > label{
-        margin: 10px;
+        margin: 0px;
+        padding:0px;
+                /* height:50px; */
+
     }
     .input-felter.show{
         display:flex
     }
-  input[type="text"]{
-        height:10px;
-        border-radius:5px;
-        border:none;
-        height:30px;
-        background-color:#FBFBFB;
-        color: #4E4646;
-        font-size:12px;;
-        font-weight: 500;
-        width:auto;
-        overflow:visible;
-        margin:10px;
-        padding:0px;
-        height:50px;
-        
-
-    }
+ 
     
   
     .label-name{
@@ -289,21 +281,44 @@ $blocks = $stmt->get_result();
         font-weight:900;
         padding:0px;
         border-radius:5px;
+        /* background-color:purple; */
+        /* height:50px; */
         
 
     }
     .label{
        font-family: 'Jost', sans-serif;
-       font-size: 16px;
+       font-size: 12px;
        color: var(--blue);
+       padding-left:8px;
     }
+
+
+     input[type="text"]{
+        border-radius:5px;
+        border:none;
+        background-color:#FBFBFB;
+        color: #4E4646;
+        font-size:12px;;
+        font-weight: 500;
+        width:auto;
+        overflow:visible;
+        margin:0px;
+        padding:8px;
+        height:40px;
+       
+
+    }
+
+    /* //blokkens titel i højre hjørne */
     .section-label{
         color:#C7C6C6;
         position:absolute;
         background-color:white;
         z-index:20!important;
         top:0;
-        padding:15px;
+        right:0px;
+        padding:8px;
         
 
     }
