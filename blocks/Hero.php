@@ -49,7 +49,7 @@ class HeroBlock implements BlockInterface {
         $title   = htmlspecialchars($data['title'] ?: 'Bridge-navn');
         $address = htmlspecialchars($data['address'] ?: 'adresse');
         $phone   = htmlspecialchars($data['phone'] ?: 'telefon');
-        $bg      = htmlspecialchars($data['bg_image'] ?: '/assets/images/no-image.jpg');
+        $bg      = htmlspecialchars($data['bg_image'] ?: '../assets/images/no-image.jpg');
         
 
         // Styling defaults
@@ -60,7 +60,7 @@ class HeroBlock implements BlockInterface {
         $textColor = htmlspecialchars(
             $data['text_color'] ?: '#ffffff'
         );
-        $bg = htmlspecialchars($data['bg_image'] ?: '/assets/images/no-image.jpg');
+        $bg = htmlspecialchars($data['bg_image'] ?: '../assets/images/no-image.jpg');
         return "
             <section
                 class='hero'

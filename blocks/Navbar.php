@@ -6,14 +6,14 @@ class NavbarBlock implements BlockInterface {
     public static function getSchema(): array {
         return [
             'logo_image' => ['type' => 'image', 'label' => 'Logo'],
-            'links'      => ['type' => 'text',  'label' => 'Menupunkter (format: Tekst|link, adskilt af komma)'],
+            'links'      => ['type' => 'text',  'label' => 'Menupunkter (adskilt af komma)'],
         ];
     }
 
     // Genererer den faktiske HTML til den offentlige side
     public static function render(array $data): string {
-        $logo = htmlspecialchars($data['logo_image'] ?: '/assets/images/no-image.jpg');
-        $raw  = $data['links'] ?: 'test,test,test, test,test,test';
+        $logo = htmlspecialchars($data['logo_image'] ?: '../assets/images/logo.png');
+        $raw  = $data['links'] ?: 'LINK, LINK, LINK, LINK, LINK, LINK, LINK, LINK, LINK';
 
         $items = '';
         foreach (explode(',', $raw) as $pair) {
@@ -40,11 +40,11 @@ class NavbarBlock implements BlockInterface {
                 gap: 20px;
                 padding: 8px 16px;
                 box-sizing: border-box;
-                width: 100%;
+                width: 100%!important;
             }
             .navbar-logo img {
                 height: 36px;
-                display: block;
+                display: flex;
             }
             .navbar-links {
                 list-style: none;

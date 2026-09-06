@@ -66,7 +66,7 @@ $blocks = $stmt->get_result();
                     $blockId   = (int)$block['id'];
                 ?>
                 <div class="editor-section" data-block-id="<?= $blockId ?>">
-<a href="delete-block.php?block_id=<?= $blockId ?>&page_id=<?= (int)$page['id'] ?>"
+<a href="delete-block.php?block_id=<?= $blockId ?>&page_id=<?= (int)$page['id'] ?>"     
                        class="delete-button"
                      >
                         <i class="fa-solid fa-circle-xmark"></i>
@@ -95,14 +95,22 @@ $blocks = $stmt->get_result();
             <?php endwhile; ?>
         </div> 
     </form>
+<div class="editor-sections">
+    <div class="editor-section">
+        
+    
+     <div class="add-block">
+       
+       <form method="POST" action="add-block.php">                                    
 
-    <!-- Tilføj ny blok (egen form, ligger  uden for while-loopet) -->
-    <div class="add-block">
-       <form method="POST" action="add-block.php">
-        <input type="hidden" name="page_id" value="<?=  (int)$page['id']?>">
+        <input type="hidden" name="page_id" value="<?=  (int)$page['id']?>">     
+        <!-- <div class="editor-sections"></div>    
+        <div class="editor-section-empty">Tilføj section her + </div> 
+        spørg khalid om ux'en her -->
+
                                 <div class="buttons">
                                    <?php foreach (BlockRegistry::all() as $type => $class): ?>
-                                    <!-- gemmer alle key som $type og key som $class -->
+                                    <!-- gemmer alle key som $type og key som $class --> 
                                     <button class="button orange" type="submit"
                                      name="block_type" value="<?= (htmlspecialchars($type))?>" 
                                      >
@@ -113,6 +121,12 @@ $blocks = $stmt->get_result();
     </input>
     </form>
     </div>
+    
+    </div>
+    
+</div>
+    <!-- Tilføj ny blok (egen form, ligger  uden for while-loopet) -->
+   
 
 </main>
    
@@ -175,14 +189,16 @@ $blocks = $stmt->get_result();
     }
     .delete-button {
    color:red;
-    padding-right:100%;
     z-index:1;
-    top:0;
+    top:10;
     position:absolute;
+    font-size:100px;
+    left:-10px;
 
     }
     .fa-circle-xmark {
         background-color: transparent;
+
     }
     footer {
         display: flex;
@@ -208,6 +224,8 @@ $blocks = $stmt->get_result();
         align-items:center;
         flex-direction:column;
         width:100%;
+
+        overflow:visible!important;
     }
     /* //stribede bokse */
     .editor-section{
@@ -221,6 +239,7 @@ $blocks = $stmt->get_result();
         z-index:0!important;
         position:relative;
         margin-top: 100px;
+
         
     }
     
@@ -228,7 +247,7 @@ $blocks = $stmt->get_result();
     .input-felter{
         background-color:black;
         display:flex;
-        justify-content:space-around; 
+        justify-content:center; 
         align-items:center;
      
         width:100%; 
@@ -237,6 +256,9 @@ $blocks = $stmt->get_result();
 
 
         
+    }
+    .input-felter > label{
+        margin: 10px;
     }
     .input-felter.show{
         display:flex
@@ -252,7 +274,7 @@ $blocks = $stmt->get_result();
         font-weight: 500;
         width:auto;
         overflow:visible;
-        margin:0px;
+        margin:10px;
         padding:0px;
         height:50px;
         
@@ -291,12 +313,27 @@ $blocks = $stmt->get_result();
         border:none;
         
     }
-    .add-block{
-        background-color:pink;
 
+
+    /* //sectionen med en tom "plade" */
+    .add-block{
+        background-color:purple;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .buttons{
+        background-color:orange;
     }
     .editor-section.selected {
     border-color: orange;
+}
+
+.editor-section-empty{
+    background-color:blue;
+    width:100%;
+
 }
 </style>
 <script>
