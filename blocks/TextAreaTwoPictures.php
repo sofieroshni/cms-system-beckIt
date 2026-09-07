@@ -32,7 +32,7 @@ class TextAreaTwoPicturesBlock implements BlockInterface
     public static function render(array $data): string
     {
         $title = htmlspecialchars(
-            $data['contentTitle'] ?? 'Indsæt under-overskrift'
+            $data['contentTitle'] ?? 'Indsæt Overskrift'
         );
 
         $imgUrl = htmlspecialchars(
@@ -44,7 +44,7 @@ class TextAreaTwoPicturesBlock implements BlockInterface
         );
 
         $whitetext = htmlspecialchars(
-            $data['content'] ?? 'Indsæt tekst, Indsæt tekst, Indsæt tekst'
+            $data['content'] ?? 'Indsæt tekst..'
         );
 
         return "
@@ -76,18 +76,27 @@ class TextAreaTwoPicturesBlock implements BlockInterface
                 }
 
                 .column {
-                    background-color: red;
                     display: flex;
                     flex-direction: column;
-                    width:100%;
+                    width:500px;
+                    height:400px
                     padding:20px;
                     gap:20px;
                 }
                     .column{
-                    width:100px;
-                    height:100px;
+                    width:500px;
+                    height:500px;
+                    padding:20px;
                     }
+                    .column p {
+                    font-size:20px;
+                    color:#D9D9D9;
+                    }
+  .column h2 {
+                    font-size:45px;
+                    color:#D9D9D9;
 
+                    }
             
             </style>
         ";
