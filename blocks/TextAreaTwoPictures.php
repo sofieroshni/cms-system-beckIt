@@ -32,19 +32,19 @@ class TextAreaTwoPicturesBlock implements BlockInterface
     public static function render(array $data): string
     {
         $title = htmlspecialchars(
-            $data['contentTitle'] ?? 'Indsæt Overskrift'
+            $data['contentTitle'] ?: 'Indsæt Overskrift'
         );
 
         $imgUrl = htmlspecialchars(
-            $data['imageUrl'] ?? '../assets/images/no-image.jpg'
+            $data['imageUrl'] ?: '../assets/images/no-image.jpg'
         );
 
         $imgUrl2 = htmlspecialchars(
-            $data['imageUrlSecond'] ?? '../assets/images/no-image.jpg'
+            $data['imageUrlSecond'] ?: '../assets/images/no-image.jpg'
         );
 
         $whitetext = htmlspecialchars(
-            $data['content'] ?? 'Indsæt tekst..'
+            $data['content'] ?: 'Indsæt tekst..'
         );
 
         return "
@@ -57,8 +57,8 @@ class TextAreaTwoPicturesBlock implements BlockInterface
                     </div>
 
                     <div class='column'>
-                        <img src='{$imgUrl}' alt=''></img>
-                        <img src='{$imgUrl2}' alt=''></img>
+                        <img class='img-empty' src='{$imgUrl}' alt=''></img>
+                        <img class='img-empty' src='{$imgUrl2}' alt=''></img>
                     </div>
 
                 </div>
@@ -73,19 +73,21 @@ class TextAreaTwoPicturesBlock implements BlockInterface
                     justify-content: center;
                     flex-direction: row;
                     font-family: 'Jost', sans-serif;
+                    padding-top:50px;
+                    padding-bottom:50px;
                 }
 
                 .column {
                     display: flex;
                     flex-direction: column;
-                    width:500px;
-                    height:400px
+                    box-size:border-box;
+               
                     padding:20px;
-                    gap:20px;
+                    gap:40px;
+                    text-align:left;
                 }
                     .column{
-                    width:500px;
-                    height:500px;
+                    width:30%;
                     padding:20px;
                     }
                     .column p {
@@ -96,6 +98,9 @@ class TextAreaTwoPicturesBlock implements BlockInterface
                     font-size:45px;
                     color:#D9D9D9;
 
+                    }
+                    .img-empty {
+                   max-width:400px;
                     }
             
             </style>

@@ -7,26 +7,27 @@ require_once __DIR__ . '/BlockInterface.php';
              return[
         
         'contentTitle'=> ['type' => 'text', 'label' => 'Titel'],
+        'contentTitle2' =>  ['type' => 'text', 'label' => 'Titel'],
 
         ];
         }
         public static function render (array $data): string {
-            $contentTitle = htmlspecialchars($data['contentTitle'] ?? 'hej');
+            $bjælker = [htmlspecialchars($data['contentTitle']), ($data['contentTitle2'])];
+            
 
               return "
+              <section>
         <table>
   <tr>
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
+    <th>Underklub</th>
+    <th>Spilledag</th>
+    <th>Tidspunkt</th>
   </tr>
   <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
   </tr> 
   <style>
   </style>;
+  </section>
   ";
         }
         
