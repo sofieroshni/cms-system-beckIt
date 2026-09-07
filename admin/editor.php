@@ -197,13 +197,9 @@ $blocks = $stmt->get_result();
     overflow-x:visible;
     width:20px;
     height:20px;
-
-
-
     }
     .fa-circle-xmark {
-       color:
-
+       color:red;
     }
     footer {
         display: flex;
@@ -229,10 +225,8 @@ $blocks = $stmt->get_result();
         align-items:center;
         flex-direction:column;
         width:100%;
-
         overflow:visible!important;
-    }
-    /* //stribede bokse */
+    }  /* //stribede bokse */
     .editor-section{
         border:#C7C6C6 3px  dashed;
         border-radius: 5px;
@@ -244,47 +238,31 @@ $blocks = $stmt->get_result();
         z-index:0!important;
         position:relative;
         margin-top: 100px;
-
-        
-    }
-    
-    /* //her ligge ALLE inputfelterne den skal skjules og vise */
+    } /* //her ligge ALLE inputfelterne den skal skjules og vise */
     .input-felter{
         background-color:black;
         display:flex;
         justify-content:center; 
         align-items:center;
-     
         width:100%; 
         padding-top:20px;
         padding-bottom:20px;
-
-
-        
+        gap: 12px;        
     }
     .input-felter > label{
         margin: 0px;
-        padding:0px;
-                /* height:50px; */
-
+        padding:0px;            /* height:50px; */
     }
     .input-felter.show{
-        display:flex
+        display:flex;
     }
- 
-    
-  
     .label-name{
         background-color:#5271AC;
         color:white;
         font-size: 30px;
         font-weight:900;
         padding:0px;
-        border-radius:5px;
-        /* background-color:purple; */
-        /* height:50px; */
-        
-
+        border-radius:5px;     /* background-color:purple; */ /* height:50px; */
     }
     .label{
        font-family: 'Jost', sans-serif;
@@ -292,8 +270,6 @@ $blocks = $stmt->get_result();
        color: var(--blue);
        padding-left:8px;
     }
-
-
      input[type="text"]{
         border-radius:5px;
         border:none;
@@ -306,11 +282,7 @@ $blocks = $stmt->get_result();
         margin:0px;
         padding:8px;
         height:40px;
-       
-
-    }
-
-    /* //blokkens titel i højre hjørne */
+    } /* //blokkens titel i højre hjørne */
     .section-label{
         color:#C7C6C6;
         position:absolute;
@@ -319,18 +291,12 @@ $blocks = $stmt->get_result();
         top:0;
         right:0px;
         padding:8px;
-        
-
     }
     .tilføj{
         background:none;
         color:white;
-        border:none;
-        
-    }
-
-
-    /* //sectionen med en tom "plade" */
+        border:none;     
+    }/* //sectionen med en tom "plade" */
     .add-block{
         background-color:purple;
         display:flex;
@@ -344,19 +310,15 @@ $blocks = $stmt->get_result();
     .editor-section.selected {
     border-color: orange;
 }
-
 .editor-section-empty{
     background-color:blue;
     width:100%;
-
 }
 </style>
 <script>
-
     const editSection = document.querySelectorAll('.editor-section');
-
     editSection.forEach(function(section) {
-        section.addEventListener('click', function() {
+    section.addEventListener('click', function() {
             section.classList.toggle('selected');
         });
     });
