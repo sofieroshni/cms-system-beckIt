@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/BlockInterface.php';
 
-class TextAreaBlock implements BlockInterface {
+class TextAreaTwoPicturesBlock implements BlockInterface {
     public static function getSchema(): array {
         return [
             'contentTitle'=> ['type' => 'text', 'label' => 'Titel'],
@@ -30,7 +30,7 @@ tekst felt tekst felt tekst felt tekst felt tekst felt ');
     width:100%;
     height:400px;
     display:flex;
-    
+
 
     font-family: 'Jost', sans-serif;
 

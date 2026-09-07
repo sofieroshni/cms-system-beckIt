@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/BlockInterface.php';
 
-class TextAreaBlock implements BlockInterface {
+class TextAreaBlueBlock implements BlockInterface {
     public static function getSchema(): array {
         return [
             'contentTitle'=> ['type' => 'text', 'label' => 'Titel'],

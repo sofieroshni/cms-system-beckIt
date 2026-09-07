@@ -24,7 +24,6 @@ class BlockRegistry {
         'tabel' => 'TabelBlock',
          'cards' => 'CardsBlock'
 
-
     ];
 
     // Slår en enkelt bloktype op, fx BlockRegistry::get('hero') -> "HeroBlock"
