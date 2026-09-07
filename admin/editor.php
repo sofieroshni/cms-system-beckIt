@@ -122,7 +122,7 @@ $blocks = $stmt->get_result();
     </form>
     </div>
     
-    ></div>
+    </div>
     
 </div>
     <!-- Tilføj ny blok (egen form, ligger  uden for while-loopet) -->

@@ -44,8 +44,10 @@ tekst felt tekst felt tekst felt tekst felt tekst felt ');
     }
     
     .textarea-block{
-        width: 997px;
-        height: 823px;
+        font-family:'Jost', sans-serif;
+
+        width: 750px;
+        height: 700px;
         background-color:#213377; display: flex; 
         flex-direction:column;
         align-items:center; 
@@ -66,7 +68,7 @@ font-family: 'Jost' sans-serif;
 margin-bottom:20px;
 }
 .graydiv{
-width: 683px;
+width: 680px;
 height:468px;
 text-align:start;
 background-color:#DADDE6;

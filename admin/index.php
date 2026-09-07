@@ -118,7 +118,9 @@ $result = mysqli_query($connection, "SELECT * FROM pages ORDER BY sort_order ASC
     text-align: center;
     flex-direction: column;
 }
-
+.admin-section{
+    margin-bottom:200px;
+}
 
 </style>
 
