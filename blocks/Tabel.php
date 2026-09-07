@@ -24,7 +24,7 @@ class TabelBlock implements BlockInterface {
      * Render-funktionen håndterer både visning i editor.php og preview.php
      */
     public static function render(array $data): string {
-        $overskrift = htmlspecialchars($data['overskrift'] ?? '', ENT_QUOTES, 'UTF-8');
+        $overskrift = htmlspecialchars($data['overskrift'] ?? 'Overskrift (valgfrit)', ENT_QUOTES, 'UTF-8');
         
         // Dekod eksisterende rækker gemt fra formularen
         $rawRows = $data['rows_json'] ?? '[]';
@@ -53,7 +53,7 @@ class TabelBlock implements BlockInterface {
 
         return "
         <section class=\"tabel-block-container\" id=\"{$uniqId}\">
-            " . ($overskrift ? "<h2>{$overskrift}</h2>" : "") . "
+            " . ($overskrift ? "<h2 class='h2-table'>{$overskrift}</h2>" : "") . "
             
             <table>
                 <thead>
@@ -83,19 +83,46 @@ class TabelBlock implements BlockInterface {
             <!-- CSS til struktur og skjul af builder-elementer på preview.php -->
             <style>
                 #{$uniqId} table {
-                    width: 100%;
+                    width: 80%; 
                     border-collapse: collapse;
+                     margin-bottom: 40px;
+                    margin-top: 40px;
+
+                     font-family: 'Jost', sans-serif;
+
                 }
-                #{$uniqId} th, #{$uniqId} td {
-                    border: 1px solid #ccc;
+                    .h2-table{
+                      margin-top:0ppx;
+                    font-family: 'Jost', sans-serif;
+                     color:#213377;
+                     font-size:32px;
+                     font-weight:900;
+
+                    }
+                #{$uniqId} th {
+                    border: 1px solid white;
                     padding: 8px;
                     text-align: left;
+                    background-color:#213377;
+                    color:white;
+                    margin:1px;
+                    font-size:20px;
                 }
+                    #{$uniqId} td {
+                     border: 1px solid #21347748 ;
+                    padding: 8px;
+                    text-align: left;
+                    background-color:white;
+                    color:#213377;
+                    margin:1px;
+                    }
                 #{$uniqId} .tabel-builder-controls {
                     margin-top: 15px;
                     padding: 10px;
-                    background: #f4f4f4;
+                    background: #5271AC;
                     border: 1px dashed #aaa;
+                    color:white;
+
                 }
                 #{$uniqId} .builder-inputs {
                     display: flex;

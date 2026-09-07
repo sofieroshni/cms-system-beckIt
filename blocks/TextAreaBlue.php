@@ -12,12 +12,10 @@ class TextAreaBlueBlock implements BlockInterface {
     }
 
     public static function render(array $data): string {        
-        $title = htmlspecialchars($data['contentTitle'] ?: 'indsæt under-overskrift');
-        $grayText = htmlspecialchars($data['content'] ?: 'indsæt tekst');
-        $textArea = htmlspecialchars($data['TextsArea'] ?? 'tekst felt tekst felt tekst felt tekst felt tekst felt tekst felt tekst felt tekst felt tekst felt 
-tekst felt tekst felt tekst felt tekst felt tekst felt tekst felt tekst felt 
-tekst felt tekst felt tekst felt tekst felt tekst felt ');
-        $textArea3 = htmlspecialchars($data['TextArea3'] ?? 'H3' );
+        $title = htmlspecialchars($data['contentTitle'] ?: 'Indsæt overskrift..');
+        $grayText = htmlspecialchars($data['content'] ?: 'Indsæt tekst..');
+        $textArea = htmlspecialchars($data['TextsArea'] ?: 'Indsæt en længerer tekst..');
+        $textArea3 = htmlspecialchars($data['TextArea3'] ?: 'Indsæt tekst..' );
         return "
         <section>
         <div class='textarea-block'>
@@ -35,6 +33,7 @@ tekst felt tekst felt tekst felt tekst felt tekst felt ');
 
          <style>
     section{
+    margin-top:50px;
     font-family:'Jost' sans-serif;
     width: 100%;
     display:flex;
@@ -88,7 +87,7 @@ background-color:#DADDE6;
 // z-index:10;
 }
 .textarea3{
-font-size:25px;
+font-size:20px;
 font-weight: lighter;
 color: #1B1818;
 padding:18px;
@@ -97,7 +96,8 @@ padding-bottom:0px;
 
 .p {
 color: #1B1818;
-font-size:20px;
+margin-top:8px;
+font-size:16px;
 padding:18px;
 padding-top:0px;
 
