@@ -57,7 +57,6 @@ tekst felt tekst felt tekst felt tekst felt tekst felt ');
 
 .graytext{
  color:#D9D9D9;
-margin-top:12px;
 margin-bottom:12px;
 
 }
@@ -65,7 +64,7 @@ margin-bottom:12px;
 .h2{
 color:white;
 font-family: 'Jost' sans-serif;
-margin-bottom:20px;
+margin-top:12px;
 }
 .graydiv{
 width: 680px;
@@ -73,19 +72,20 @@ height:468px;
 text-align:start;
 background-color:#DADDE6;
 position:relative;
+margin-top:12px;
 
 
 }
 .graydiv::after{
 content: '';
-width: 68px;
+width: 18px;
 height:468px;
 background-color:#DADDE6;
-position:absolute;
-left:-10px;
-top:0;
-opacity:100;
-z-index:10;
+// position:absolute;
+// left:-10px;
+// top:0;
+// opacity:100;
+// z-index:10;
 }
 .textarea3{
 font-size:25px;
