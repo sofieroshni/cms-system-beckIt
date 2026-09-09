@@ -18,8 +18,12 @@ final class BlockRegistry
 {
     /** @var array<string, class-string<BlockInterface>> */
     private const BLOCKS = [
-        'hero'    => HeroBlock::class,
-        'welcome' => WelcomeBlock::class,
+        'navbar'   => NavbarBlock::class,
+        'hero'     => HeroBlock::class,
+        'welcome'  => WelcomeBlock::class,
+        'textarea' => TextAreaBlock::class,
+        'image'    => ImageBlock::class,
+        'gallery'  => GalleryBlock::class,
     ];
 
     private function __construct()

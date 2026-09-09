@@ -11,8 +11,11 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$pdo   = Database::getConnection();
-$pages = (new PageRepository($pdo))->findAll();
+$pdo = Database::getConnection();
+
+// Sider vises i træets rækkefølge med undersider under deres forælder,
+// frem for som en flad liste hvor sammenhængen ikke kan ses.
+$pages = PageTree::flatten((new PageRepository($pdo))->findAll());
 
 $basePath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
 ?>
@@ -50,8 +53,18 @@ $basePath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
 
     <ul class="page-list" id="page-list">
         <?php foreach ($pages as $index => $page): ?>
-            <li class="page-row" data-page-id="<?= (int) $page['id'] ?>">
-                <span class="page-row__handle" aria-hidden="true">⠿</span>
+            <li class="page-row" data-page-id="<?= (int) $page['id'] ?>"
+                data-depth="<?= (int) $page['depth'] ?>"
+                style="--depth: <?= (int) $page['depth'] ?>">
+                <?php /*
+                    Grebet vises kun for rod-sider. Sorteringen gemmer én
+                    samlet rækkefølge, og at trække en underside op mellem
+                    rod-siderne ville ændre dens plads uden at flytte den
+                    ud af sin forælder — altså et resultat, der ikke svarer
+                    til, hvad man lige gjorde.
+                */ ?>
+                <span class="page-row__handle<?= $page['depth'] > 0 ? ' is-locked' : '' ?>"
+                      aria-hidden="true"><?= $page['depth'] > 0 ? '└' : '⠿' ?></span>
 
                 <span class="page-row__title"><?= e($page['title']) ?></span>
 

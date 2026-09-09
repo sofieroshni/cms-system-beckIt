@@ -17,8 +17,9 @@ require_once __DIR__ . '/../bootstrap.php';
 
 $pageId = filter_input(INPUT_GET, 'page_id', FILTER_VALIDATE_INT) ?: 0;
 
-$pdo  = Database::getConnection();
-$page = (new PageRepository($pdo))->find($pageId);
+$pdo            = Database::getConnection();
+$pageRepository = new PageRepository($pdo);
+$page           = $pageRepository->find($pageId);
 
 if ($page === null) {
     http_response_code(404);
@@ -71,5 +72,5 @@ header('Content-Type: text/html; charset=utf-8');
 echo PageRenderer::renderDocument(
     $page,
     $blocks,
-    RenderContext::editor($basePath)
+    RenderContext::editor($basePath, SiteMap::fromPages($pageRepository->findAll()))
 );

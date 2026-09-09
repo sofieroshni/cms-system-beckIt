@@ -13,6 +13,10 @@ require_once __DIR__ . '/../bootstrap.php';
 $pdo       = Database::getConnection();
 $templates = (new TemplateRepository($pdo))->findActive();
 
+// Alle eksisterende sider kan vælges som forælder. En ny side har endnu
+// ingen undersider, så der er intet at sortere fra.
+$parentChoices = PageTree::choices((new PageRepository($pdo))->findAll());
+
 $basePath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
 $error    = $_GET['fejl'] ?? null;
 ?>
@@ -55,6 +59,20 @@ $error    = $_GET['fejl'] ?? null;
                    placeholder="Fx Forside eller Kontakt">
             <p class="field__hint">
                 Adressen dannes automatisk ud fra titlen og kan rettes senere.
+            </p>
+        </div>
+
+        <div class="field">
+            <label for="parent">Underside af</label>
+            <select id="parent" name="parent_id">
+                <option value="0">— ingen (ligger i roden) —</option>
+                <?php foreach ($parentChoices as $choiceId => $choiceLabel): ?>
+                    <option value="<?= (int) $choiceId ?>"><?= e($choiceLabel) ?></option>
+                <?php endforeach; ?>
+            </select>
+            <p class="field__hint">
+                Undersider får deres egen mappe under forælderen, fx
+                <code>om-os/bestyrelse/</code>.
             </p>
         </div>
 

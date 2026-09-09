@@ -85,8 +85,8 @@ final class PageSaver
      */
     private function savePageSettings(int $pageId, array $current, array $input): void
     {
-        $title = trim((string) ($input['title'] ?? $current['title']));
-        $slug  = trim((string) ($input['slug'] ?? $current['slug']));
+        $title  = trim((string) ($input['title'] ?? $current['title']));
+        $slug   = trim((string) ($input['slug'] ?? $current['slug']));
         $status = (string) ($input['status'] ?? $current['status']);
 
         if ($title === '') {
@@ -105,16 +105,60 @@ final class PageSaver
             throw new InvalidArgumentException('Ugyldig status.');
         }
 
-        // Sluggen må ikke kollidere med en anden side under samme forælder.
-        $clash = $this->pages->findBySlug($slug, $current['parent_id'] ?? null);
+        $parentId = $this->resolveParent($pageId, $current, $input);
+
+        // Sluggen må ikke kollidere under den forælder, siden ender under
+        // — ikke den, den kom fra. Flytter man en side, kan den støde ind
+        // i en anden slug på det nye niveau.
+        $clash = $this->pages->findBySlug($slug, $parentId);
 
         if ($clash !== null && (int) $clash['id'] !== $pageId) {
             throw new InvalidArgumentException(
-                "Webadressen '{$slug}' er allerede i brug af en anden side."
+                "Webadressen '{$slug}' er allerede i brug af en anden side på samme niveau."
             );
         }
 
-        $this->pages->update($pageId, $title, $slug, $status);
+        $this->pages->update($pageId, $title, $slug, $status, $parentId);
+    }
+
+    /**
+     * Afgør, hvilken forælder siden skal have, og afviser flyt der ville
+     * ødelægge hierarkiet.
+     *
+     * @param array<string, mixed> $current
+     * @param array<string, mixed> $input
+     */
+    private function resolveParent(int $pageId, array $current, array $input): ?int
+    {
+        if (!array_key_exists('parent_id', $input)) {
+            return $current['parent_id'] !== null ? (int) $current['parent_id'] : null;
+        }
+
+        $parentId = (int) $input['parent_id'];
+
+        // 0 fra dropdownen betyder "ingen forælder" — siden ligger i roden.
+        if ($parentId <= 0) {
+            return null;
+        }
+
+        if ($parentId === $pageId) {
+            throw new InvalidArgumentException('En side kan ikke være sin egen forælder.');
+        }
+
+        if ($this->pages->find($parentId) === null) {
+            throw new InvalidArgumentException('Den valgte forælder findes ikke.');
+        }
+
+        // Uden denne kontrol kunne en side flyttes ned under sit eget
+        // barnebarn. Forældrekæden ville blive cyklisk, og hverken
+        // eksporten eller sidetræet kunne finde en vej ud af den.
+        if (in_array($parentId, $this->pages->descendantIds($pageId), true)) {
+            throw new InvalidArgumentException(
+                'Siden kan ikke placeres under en af sine egne undersider.'
+            );
+        }
+
+        return $parentId;
     }
 
     /**

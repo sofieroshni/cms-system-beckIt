@@ -72,9 +72,26 @@ final class FieldValidator
             'color'    => self::color($value, $default),
             'number'   => self::number($value, $default, $field),
             'select'   => self::select($value, $default, $field['options'] ?? []),
+            'page'     => self::pageReference($value),
             'repeater' => self::repeater($value, $field),
             default    => $default,
         };
+    }
+
+    /**
+     * En henvisning til en anden side, gemt som dens id.
+     *
+     * Vi gemmer id'et og ikke adressen, fordi adressen ændrer sig: en side
+     * kan få en ny slug eller blive flyttet ned under en forælder. Id'et
+     * er stabilt, og RenderContext regner den rigtige sti ud ved rendering.
+     *
+     * 0 betyder "ingen side valgt". At id'et rent faktisk findes,
+     * kontrolleres først ved rendering — en side kan jo blive slettet,
+     * efter linket blev oprettet.
+     */
+    private static function pageReference(mixed $value): int
+    {
+        return is_numeric($value) ? max(0, (int) $value) : 0;
     }
 
     private static function text(mixed $value, mixed $default, int $max): string

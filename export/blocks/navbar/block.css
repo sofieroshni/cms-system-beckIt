@@ -1,0 +1,67 @@
+/* =====================================================================
+   Navbar
+   ===================================================================== */
+
+.block--navbar {
+    --background-color: #1e3a8a;
+    --text-color: #ffffff;
+    --link-size: 16px;
+    --font-family: 'Jost';
+
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+.navbar__inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding: 0.75rem 1.25rem;
+}
+
+.navbar__logo {
+    max-height: 4rem;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.navbar__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.navbar__links a {
+    color: inherit;
+    text-decoration: none;
+    font-family: var(--font-family), var(--font-body);
+    font-size: var(--link-size);
+    line-height: 1.4;
+}
+
+.navbar__links a:hover {
+    text-decoration: underline;
+}
+
+/* Døde links — dem uden valgt side eller adresse — dæmpes, så det er
+   synligt i editoren, at de endnu ikke fører nogen steder hen. */
+.navbar__links a[href='#'] {
+    opacity: 0.65;
+}
+
+@media (max-width: 40rem) {
+    .navbar__inner {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .navbar__links {
+        justify-content: center;
+    }
+}

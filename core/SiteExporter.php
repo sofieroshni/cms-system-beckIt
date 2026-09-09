@@ -68,17 +68,14 @@ final class SiteExporter
 
         $this->prepareDirectory();
 
-        // Slås op på id, så forældrekæden kan følges uden en query pr. side.
-        $byId = [];
-        foreach ($all as $page) {
-            $byId[(int) $page['id']] = $page;
-        }
-
-        $frontPageId = $this->findFrontPage($published);
-        $exported    = 0;
+        // Sitets struktur udregnes ét sted. Både mappestierne her og de
+        // links, blokkene skriver ud, bygger på den samme kilde — ellers
+        // kunne en side ende i én mappe, mens menuen pegede på en anden.
+        $siteMap  = SiteMap::fromPages($all);
+        $exported = 0;
 
         foreach ($published as $page) {
-            $this->exportPage($page, $byId, (int) $page['id'] === $frontPageId);
+            $this->exportPage($page, $siteMap);
             $this->pages->markAsPublished((int) $page['id']);
             $exported++;
         }
@@ -94,40 +91,20 @@ final class SiteExporter
     }
 
     /**
-     * Forsiden er den første udgivne side i rodniveauet.
-     *
-     * Rækkefølgen er den, brugeren selv har trukket sig frem til under
-     * "Dine sider", så valget er synligt og kan ændres uden ny kode.
-     *
-     * @param array<int, array<string, mixed>> $published
+     * @param array<string, mixed> $page
      */
-    private function findFrontPage(array $published): int
-    {
-        foreach ($published as $page) {
-            if ($page['parent_id'] === null) {
-                return (int) $page['id'];
-            }
-        }
-
-        // Ingen udgivne rod-sider: første side bliver forside, så
-        // websitet i det mindste har en index.html.
-        return (int) $published[0]['id'];
-    }
-
-    /**
-     * @param array<string, mixed>                 $page
-     * @param array<int, array<string, mixed>>     $byId
-     */
-    private function exportPage(array $page, array $byId, bool $isFrontPage): void
+    private function exportPage(array $page, SiteMap $siteMap): void
     {
         $pageId = (int) $page['id'];
         $blocks = $this->blocks->findByPage($pageId, onlyVisible: true);
 
         // Forsiden ligger i roden; alle andre i deres egen mappe.
-        $segments = $isFrontPage ? [] : $this->pathSegments($page, $byId);
+        $segments = $siteMap->segments($pageId);
         $depth    = count($segments);
 
-        $context = RenderContext::export($depth);
+        // Strukturen sendes med, så links mellem sider bliver til relative
+        // stier ud fra netop denne sides placering i mappetræet.
+        $context = RenderContext::export($depth, $siteMap);
         $html    = PageRenderer::renderDocument($page, $blocks, $context);
 
         // Stylesheets og billeder noteres, mens vi er her, så vi bagefter
@@ -149,33 +126,6 @@ final class SiteExporter
         if (file_put_contents($directory . '/index.html', $html) === false) {
             throw new RuntimeException("Kunne ikke skrive: {$directory}/index.html");
         }
-    }
-
-    /**
-     * Følger forældrekæden og bygger mappestien.
-     *
-     * @param array<string, mixed>             $page
-     * @param array<int, array<string, mixed>> $byId
-     * @return array<int, string>
-     */
-    private function pathSegments(array $page, array $byId): array
-    {
-        $segments = [(string) $page['slug']];
-        $parentId = $page['parent_id'] !== null ? (int) $page['parent_id'] : null;
-
-        // Loftet beskytter mod en cyklisk forældrekæde. Databasen tillader
-        // den i teorien, og uden loftet ville eksporten hænge i en
-        // uendelig løkke frem for at fejle tydeligt.
-        $depth = 0;
-
-        while ($parentId !== null && isset($byId[$parentId]) && $depth < 20) {
-            $parent   = $byId[$parentId];
-            $segments[] = (string) $parent['slug'];
-            $parentId = $parent['parent_id'] !== null ? (int) $parent['parent_id'] : null;
-            $depth++;
-        }
-
-        return array_reverse($segments);
     }
 
     /**

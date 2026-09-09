@@ -1,0 +1,41 @@
+/* =====================================================================
+   Billede
+   ===================================================================== */
+
+.block--image {
+    --max-width: 800px;
+    --radius: 0px;
+    --background-color: #ffffff;
+
+    padding: var(--space-lg) var(--space-md);
+    background: var(--background-color);
+}
+
+.image__figure {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.image__img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+}
+
+.image__caption {
+    margin-top: var(--space-sm);
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+}
+
+/* Vises kun i editoren, hvor en tom blok ellers ville se ud som om
+   noget var gaaet galt. */
+.image__empty {
+    margin: 0;
+    padding: var(--space-lg);
+    text-align: center;
+    color: var(--color-muted);
+    border: 2px dashed var(--color-border);
+    border-radius: 4px;
+}

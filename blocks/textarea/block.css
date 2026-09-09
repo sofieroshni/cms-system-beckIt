@@ -1,0 +1,33 @@
+/* =====================================================================
+   Tekst
+   ===================================================================== */
+
+.block--textarea {
+    --title-size: 28px;
+    --text-size: 16px;
+    --font-family: 'Jost';
+    --text-color: #1f2933;
+    --background-color: #ffffff;
+    --text-align: left;
+
+    padding: var(--space-lg) var(--space-md);
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+.textarea__inner {
+    max-width: var(--measure);
+    margin-inline: auto;
+    text-align: var(--text-align);
+    font-family: var(--font-family), var(--font-body);
+}
+
+.textarea__title {
+    margin: 0 0 var(--space-sm);
+    font-size: var(--title-size);
+    line-height: 1.25;
+}
+
+.textarea__body {
+    font-size: var(--text-size);
+}

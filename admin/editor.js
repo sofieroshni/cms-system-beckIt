@@ -249,6 +249,104 @@
         }
     });
 
+    /* --- Billedupload ------------------------------------------------ */
+
+    // change bobler, saa én lytter daekker ogsaa de billedfelter, der
+    // foerst dukker op, naar brugeren tilfoejer en blok eller en raekke.
+    canvas.addEventListener('change', async function (event) {
+        const fileInput = event.target.closest('.ed-image__file');
+
+        if (!fileInput || !fileInput.files.length) {
+            return;
+        }
+
+        const wrapper = fileInput.closest('.ed-image');
+        const pathInput = wrapper.querySelector('.ed-image__path');
+        const preview = wrapper.querySelector('.ed-image__preview');
+        // Teksten sidder i sit eget span. Ville vi skrive direkte i
+        // etiketten, ville vi slette fil-inputtet, den indeholder.
+        const buttonText = wrapper.querySelector('.ed-image__btn-text');
+
+        const data = new FormData();
+        data.append('image', fileInput.files[0]);
+
+        // En <label> kan ikke deaktiveres, men det kan inputtet inde i
+        // den. Klassen er der kun for at dæmpe knappen visuelt.
+        const previousError = wrapper.querySelector('.ed-image__error');
+        if (previousError) {
+            previousError.remove();
+        }
+
+        fileInput.disabled = true;
+        wrapper.classList.add('is-uploading');
+        buttonText.textContent = 'Sender …';
+
+        try {
+            const response = await fetch('upload-image.php', {
+                method: 'POST',
+                body: data
+            });
+
+            // Svaret laeses foerst som tekst. Gaar noget galt paa serveren,
+            // svarer PHP med en fejlside i HTML — og response.json() ville
+            // saa kaste en uforstaaelig parse-fejl i stedet for at vise,
+            // hvad der faktisk gik galt.
+            const raw = await response.text();
+            let result;
+
+            try {
+                result = JSON.parse(raw);
+            } catch (parseError) {
+                console.error('Serveren svarede ikke med JSON:', raw);
+                throw new Error(
+                    'Serveren svarede uventet. Se konsollen (F12) for detaljer.'
+                );
+            }
+
+            if (!response.ok || !result.ok) {
+                throw new Error(result.error || 'Ukendt fejl');
+            }
+
+            pathInput.value = result.path;
+            preview.innerHTML = '';
+
+            const image = document.createElement('img');
+            image.src = document.body.dataset.basePath + '/' + result.path;
+            image.alt = '';
+            preview.appendChild(image);
+
+            // Filen ligger paa disken nu, men stien staar kun i editoren.
+            // Foerst naar siden gemmes, kender databasen den.
+            markDirty();
+
+        } catch (error) {
+            // Fejlen vises ved feltet frem for i en alert, saa beskeden
+            // bliver staaende og kan laeses.
+            console.error('Upload fejlede:', error);
+            showFieldError(wrapper, error.message);
+        } finally {
+            fileInput.disabled = false;
+            wrapper.classList.remove('is-uploading');
+            buttonText.textContent = 'Vaelg fil';
+
+            // Nulstilles, saa den samme fil kan vaelges igen bagefter.
+            fileInput.value = '';
+        }
+    });
+
+    function showFieldError(wrapper, message) {
+        let notice = wrapper.querySelector('.ed-image__error');
+
+        if (!notice) {
+            notice = document.createElement('span');
+            notice.className = 'ed-image__error';
+            notice.setAttribute('role', 'alert');
+            wrapper.appendChild(notice);
+        }
+
+        notice.textContent = message;
+    }
+
     /* --- Forhaandsvis ------------------------------------------------ */
 
     document.getElementById('preview-btn').addEventListener('click', function () {

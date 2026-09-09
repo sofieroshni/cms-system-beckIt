@@ -4,13 +4,12 @@ declare(strict_types=1);
 /**
  * Fortæller en blok, HVOR den bliver renderet hen.
  *
- * Baggrund: det samme billede skal skrives forskelligt afhængigt af mål.
- * I editoren på localhost skal stien pege ind i projektmappen. I den
- * eksporterede, statiske hjemmeside skal den være relativ til den side,
- * filen ender i — og en underside i om-os/ skal pege et niveau op.
+ * Baggrund: den samme henvisning skal skrives forskelligt afhængigt af mål.
+ * I editoren på localhost skal et billede pege ind i projektmappen. I den
+ * eksporterede, statiske hjemmeside skal det være relativt til den fil,
+ * indholdet ender i — og en underside i om-os/ skal pege et niveau op.
  *
- * Uden denne kontekst ville blokkene skulle gætte, og alle billeder ville
- * knække i det øjeblik en side flyttes ned under en forælder.
+ * Det gælder både filer (asset) og links mellem sider (pageUrl).
  */
 final class RenderContext
 {
@@ -19,7 +18,9 @@ final class RenderContext
 
     private function __construct(
         public readonly string $mode,
-        private readonly string $basePath
+        private readonly string $basePath,
+        private readonly int $depth,
+        private readonly ?SiteMap $siteMap
     ) {
     }
 
@@ -28,9 +29,9 @@ final class RenderContext
      *
      * @param string $basePath Fx '/cms-system-beckIt'
      */
-    public static function editor(string $basePath = ''): self
+    public static function editor(string $basePath = '', ?SiteMap $siteMap = null): self
     {
-        return new self(self::MODE_EDITOR, rtrim($basePath, '/'));
+        return new self(self::MODE_EDITOR, rtrim($basePath, '/'), 0, $siteMap);
     }
 
     /**
@@ -39,11 +40,11 @@ final class RenderContext
      * @param int $depth Hvor mange mapper nede siden ligger.
      *                   Forside = 0, om-os/bestyrelse = 2.
      */
-    public static function export(int $depth = 0): self
+    public static function export(int $depth = 0, ?SiteMap $siteMap = null): self
     {
         $basePath = $depth > 0 ? rtrim(str_repeat('../', $depth), '/') : '.';
 
-        return new self(self::MODE_EXPORT, $basePath);
+        return new self(self::MODE_EXPORT, $basePath, $depth, $siteMap);
     }
 
     public function isEditor(): bool
@@ -66,5 +67,41 @@ final class RenderContext
         }
 
         return $this->basePath . '/' . $path;
+    }
+
+    /**
+     * Adressen på en anden side i systemet.
+     *
+     * I editoren peger den på page.php, så forhåndsvisningen kan følges.
+     * Ved eksport bliver den til en relativ sti mellem to mapper.
+     *
+     * Returnerer '#' — et dødt link — hvis siden ikke findes eller ikke er
+     * udgivet. Et link til en fil, der ikke bliver eksporteret, ville give
+     * den besøgende en 404.
+     */
+    public function pageUrl(int $pageId): string
+    {
+        if ($pageId <= 0 || $this->siteMap === null || !$this->siteMap->has($pageId)) {
+            return '#';
+        }
+
+        if ($this->isEditor()) {
+            return $this->basePath . '/page.php?id=' . $pageId;
+        }
+
+        if (!$this->siteMap->isPublished($pageId)) {
+            return '#';
+        }
+
+        // Op til roden, og derfra ned i målets mappe.
+        $up   = $this->depth > 0 ? str_repeat('../', $this->depth) : '';
+        $path = $this->siteMap->path($pageId);
+
+        if ($path === '') {
+            // Forsiden. './' frem for tom streng, så href aldrig bliver tomt.
+            return $up === '' ? './' : $up;
+        }
+
+        return $up . $path . '/';
     }
 }

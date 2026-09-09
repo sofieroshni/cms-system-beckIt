@@ -24,7 +24,9 @@
     list.addEventListener('mousedown', function (event) {
         const handle = event.target.closest('.page-row__handle');
 
-        if (handle) {
+        // Laaste greb hoerer til undersider. De sorteres sammen med deres
+        // foraelder og kan ikke traekkes frit rundt i listen.
+        if (handle && !handle.classList.contains('is-locked')) {
             handle.closest('.page-row').draggable = true;
         }
     });
@@ -111,7 +113,7 @@
                 throw new Error(result.error || 'Ukendt fejl');
             }
 
-            status.textContent = 'Rækkefølge gemt';
+            status.textContent = 'Raekkefoelge gemt';
 
             // Kvitteringen forsvinder af sig selv. Den er en bekraeftelse,
             // ikke information brugeren skal handle paa.

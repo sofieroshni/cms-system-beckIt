@@ -30,145 +30,26 @@ if ($page === null) {
 
 $blocks   = $blockRepository->findByPage($pageId);
 $basePath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
-$context  = RenderContext::editor($basePath);
 
-/**
- * Tegner ét formularfelt ud fra dets skemadefinition.
- *
- * @param array<string, mixed> $field
- */
-function renderField(string $scope, string $name, array $field, mixed $value): string
-{
-    $id    = 'f_' . $scope . '_' . $name . '_' . bin2hex(random_bytes(3));
-    $type  = $field['type'] ?? 'text';
-    $label = (string) ($field['label'] ?? $name);
+$allPages = $pageRepository->findAll();
 
-    $attributes = 'id="' . e($id) . '"'
-        . ' data-scope="' . e($scope) . '"'
-        . ' data-field="' . e($name) . '"';
+// Sitets struktur skal med, for at menupunkter kan slå deres målside op.
+$siteMap = SiteMap::fromPages($allPages);
 
-    $input = match ($type) {
-        'textarea' => '<textarea ' . $attributes . ' rows="4">'
-            . e((string) $value) . '</textarea>',
+// En side må ikke kunne vælge sig selv eller en af sine egne undersider
+// som forælder — det ville gøre forældrekæden cyklisk. De sorteres fra
+// her, så valget slet ikke kan træffes, frem for kun at blive afvist
+// bagefter af PageSaver.
+$parentChoices = PageTree::choices(
+    $allPages,
+    array_merge([$pageId], $pageRepository->descendantIds($pageId))
+);
+$context = RenderContext::editor($basePath, $siteMap);
 
-        'color' => '<input type="color" ' . $attributes
-            . ' value="' . e($value !== '' ? (string) $value : '#000000') . '">',
+// Feltrendereren kender listen over sider, så et side-felt kan tegnes
+// som en dropdown frem for et tekstfelt, man kan stave forkert i.
+$fields = new FieldRenderer($siteMap->choices(), $basePath);
 
-        'number' => '<input type="number" ' . $attributes
-            . ' value="' . e((string) $value) . '"'
-            . ' min="' . (int) ($field['min'] ?? 0) . '"'
-            . ' max="' . (int) ($field['max'] ?? 9999) . '">',
-
-        'select' => (static function () use ($attributes, $field, $value): string {
-            $html = '<select ' . $attributes . '>';
-            foreach ($field['options'] ?? [] as $option) {
-                $html .= '<option value="' . e($option) . '"'
-                    . ((string) $value === (string) $option ? ' selected' : '')
-                    . '>' . e($option) . '</option>';
-            }
-            return $html . '</select>';
-        })(),
-
-        default => '<input type="text" ' . $attributes
-            . ' value="' . e((string) $value) . '">',
-    };
-
-    return '<p class="ed-field">'
-        . '<label for="' . e($id) . '">' . e($label) . '</label>'
-        . $input
-        . '</p>';
-}
-
-/**
- * Tegner et repeater-felt: et vilkårligt antal ens rækker.
- *
- * Bruges til punktlister, navigationslinks og lignende. Rækkerne ligger i
- * blokkens egen JSON, ikke som selvstændige blokke i databasen — det er
- * dét, der sparer os for indlejrede blokke med parent_id, og dermed for
- * rekursiv rendering og forældreløse rækker ved sletning.
- *
- * En tom <template> nederst fungerer som skabelon, når brugeren tilføjer
- * en række. Så bygger JavaScript ikke felter selv; det kloner bare det,
- * PHP allerede har tegnet ud fra skemaet.
- *
- * @param array<string, mixed>                $field
- * @param array<int, array<string, mixed>>    $rows
- */
-function renderRepeater(string $name, array $field, array $rows): string
-{
-    $subSchema = $field['fields'] ?? [];
-
-    $renderRow = static function (array $row) use ($subSchema): string {
-        $html = '<div class="ed-row">';
-
-        foreach ($subSchema as $subName => $subField) {
-            $type  = $subField['type'] ?? 'text';
-            $value = e((string) ($row[$subName] ?? ''));
-            $attrs = 'data-rfield="' . e($subName) . '"'
-                . ' aria-label="' . e((string) ($subField['label'] ?? $subName)) . '"';
-
-            $html .= $type === 'textarea'
-                ? '<textarea ' . $attrs . ' rows="2">' . $value . '</textarea>'
-                : '<input type="text" ' . $attrs . ' value="' . $value . '">';
-        }
-
-        return $html
-            . '<button type="button" class="ed-btn ed-btn--delete"'
-            . ' data-action="remove-row" aria-label="Fjern række">&times;</button>'
-            . '</div>';
-    };
-
-    $html = '<div class="ed-repeater" data-repeater="' . e($name) . '">'
-        . '<span class="ed-repeater__label">'
-        . e((string) ($field['label'] ?? $name)) . '</span>'
-        . '<div class="ed-repeater__rows">';
-
-    foreach ($rows as $row) {
-        $html .= $renderRow(is_array($row) ? $row : []);
-    }
-
-    $html .= '</div>'
-        . '<button type="button" class="ed-repeater__add" data-action="add-row">'
-        . '+ Tilføj række</button>'
-        . '<template data-row-template>' . $renderRow([]) . '</template>'
-        . '</div>';
-
-    return $html;
-}
-
-/**
- * Tegner hele redigeringspanelet for én blok.
- *
- * @param class-string<BlockInterface> $class
- * @param array<string, mixed>         $settings
- * @param array<string, mixed>         $styles
- */
-function renderPanel(string $class, array $settings, array $styles): string
-{
-    $html = '<div class="ed-panel" hidden>';
-
-    $html .= '<fieldset class="ed-group"><legend>Indhold</legend>';
-    foreach ($class::getSchema() as $name => $field) {
-        $value = $settings[$name] ?? '';
-
-        $html .= ($field['type'] ?? '') === 'repeater'
-            ? renderRepeater($name, $field, is_array($value) ? $value : [])
-            : renderField('settings', $name, $field, $value);
-    }
-    $html .= '</fieldset>';
-
-    $styleSchema = $class::getStyleSchema();
-
-    if ($styleSchema !== []) {
-        $html .= '<fieldset class="ed-group"><legend>Udseende</legend>';
-        foreach ($styleSchema as $name => $field) {
-            $html .= renderField('styles', $name, $field, $styles[$name] ?? '');
-        }
-        $html .= '</fieldset>';
-    }
-
-    return $html . '</div>';
-}
 ?>
 <!DOCTYPE html>
 <html lang="da">
@@ -191,7 +72,8 @@ function renderPanel(string $class, array $settings, array $styles): string
         <link rel="stylesheet" href="<?= e($basePath . '/' . $sheet) ?>">
     <?php endforeach; ?>
 </head>
-<body class="editor" data-page-id="<?= (int) $page['id'] ?>">
+<body class="editor" data-page-id="<?= (int) $page['id'] ?>"
+      data-base-path="<?= e($basePath) ?>">
 
 <header class="ed-top">
     <a class="ed-back" href="index.php" aria-label="Tilbage til dine sider">&larr;</a>
@@ -208,6 +90,18 @@ function renderPanel(string $class, array $settings, array $styles): string
         <label for="page-slug">Webadresse</label>
         <input type="text" id="page-slug" data-page-field="slug"
                value="<?= e($page['slug']) ?>" maxlength="255">
+    </p>
+    <p class="ed-field">
+        <label for="page-parent">Underside af</label>
+        <select id="page-parent" data-page-field="parent_id">
+            <option value="0">— ingen (ligger i roden) —</option>
+            <?php foreach ($parentChoices as $choiceId => $choiceLabel): ?>
+                <option value="<?= (int) $choiceId ?>"
+                    <?= (int) ($page['parent_id'] ?? 0) === (int) $choiceId ? 'selected' : '' ?>>
+                    <?= e($choiceLabel) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
     </p>
     <p class="ed-field">
         <label for="page-status">Status</label>
@@ -246,7 +140,7 @@ function renderPanel(string $class, array $settings, array $styles): string
                 <?= $class::render($settings, $styles, $context) ?>
             </div>
 
-            <?= renderPanel($class, $settings, $styles) ?>
+            <?= $fields->panel($class, $settings, $styles) ?>
         </article>
     <?php endforeach; ?>
 </main>
@@ -300,7 +194,7 @@ function renderPanel(string $class, array $settings, array $styles): string
             <div class="ed-block__preview">
                 <?= $class::render($defaults, $dStyles, $context) ?>
             </div>
-            <?= renderPanel($class, $defaults, $dStyles) ?>
+            <?= $fields->panel($class, $defaults, $dStyles) ?>
         </article>
     </template>
 <?php endforeach; ?>

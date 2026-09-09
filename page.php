@@ -34,7 +34,10 @@ $pageBlocks = $blocks->findByPage($pageId, onlyVisible: true);
 // Basisstien svarer til den mappe, projektet ligger i under htdocs.
 // Ved eksport erstattes den af RenderContext::export().
 $basePath = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
-$context  = RenderContext::editor($basePath);
+
+// Strukturen skal med, for at links mellem sider kan slås op.
+$siteMap = SiteMap::fromPages($pages->findAll());
+$context = RenderContext::editor($basePath, $siteMap);
 
 header('Content-Type: text/html; charset=utf-8');
 

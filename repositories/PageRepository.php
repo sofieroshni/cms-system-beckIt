@@ -90,8 +90,13 @@ final class PageRepository
         return (int) $this->pdo->lastInsertId();
     }
 
-    public function update(int $id, string $title, string $slug, string $status): void
-    {
+    public function update(
+        int $id,
+        string $title,
+        string $slug,
+        string $status,
+        ?int $parentId = null
+    ): void {
         if (!Slug::isValid($slug)) {
             throw new InvalidArgumentException(
                 "Ugyldig slug: '{$slug}'. Brug kun små bogstaver, tal og bindestreg."
@@ -100,7 +105,8 @@ final class PageRepository
 
         $stmt = $this->pdo->prepare(
             'UPDATE pages
-                SET title = :title, slug = :slug, status = :status
+                SET title = :title, slug = :slug, status = :status,
+                    parent_id = :parent
               WHERE id = :id'
         );
 
@@ -108,8 +114,53 @@ final class PageRepository
             'title'  => $title,
             'slug'   => $slug,
             'status' => $status,
+            'parent' => $parentId,
             'id'     => $id,
         ]);
+    }
+
+    /**
+     * Alle sider under en given side, uanset hvor dybt.
+     *
+     * Bruges to steder: til at holde en side ude af sin egen
+     * forælder-dropdown, og til at afvise et flyt, der ville gøre en side
+     * til sit eget barnebarn. Uden den kontrol ville forældrekæden blive
+     * cyklisk, og siden kunne aldrig eksporteres.
+     *
+     * @return array<int, int>
+     */
+    public function descendantIds(int $pageId): array
+    {
+        $stmt = $this->pdo->query('SELECT id, parent_id FROM pages');
+        $rows = $stmt->fetchAll();
+
+        $children = [];
+
+        foreach ($rows as $row) {
+            $parentId = $row['parent_id'] !== null ? (int) $row['parent_id'] : 0;
+            $children[$parentId][] = (int) $row['id'];
+        }
+
+        $descendants = [];
+        $queue       = $children[$pageId] ?? [];
+
+        // Bredde-først frem for rekursion, så en cyklisk kæde i databasen
+        // ikke kan udløse et uendeligt kald.
+        while ($queue !== []) {
+            $id = array_shift($queue);
+
+            if (in_array($id, $descendants, true)) {
+                continue;
+            }
+
+            $descendants[] = $id;
+
+            foreach ($children[$id] ?? [] as $childId) {
+                $queue[] = $childId;
+            }
+        }
+
+        return $descendants;
     }
 
     /**

@@ -450,3 +450,32 @@
     opacity: 0.45;
     cursor: default;
 }
+
+/* --- Sidehierarki --------------------------------------------------- */
+
+/* Undersider rykkes ind efter deres dybde i traeet. */
+.page-row {
+    margin-left: calc(var(--depth, 0) * 2rem);
+}
+
+.page-row[data-depth]:not([data-depth='0']) .page-row__title {
+    font-weight: 400;
+}
+
+/* Grebet paa en underside markerer tilhoersforhold frem for at invitere
+   til at traekke. */
+.page-row__handle.is-locked {
+    background: var(--admin-muted);
+    cursor: default;
+    opacity: 0.6;
+}
+
+/* Foraelder-dropdownen i "Opret side". */
+.field select {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    font: inherit;
+    border: 1px solid #c7ccd3;
+    border-radius: var(--radius);
+    background: #fff;
+}

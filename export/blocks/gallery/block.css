@@ -1,0 +1,72 @@
+/* =====================================================================
+   Galleri
+   ===================================================================== */
+
+.block--gallery {
+    --columns: 3;
+    --gap: 16px;
+    --radius: 4px;
+    --background-color: #ffffff;
+
+    padding: var(--space-lg) var(--space-md);
+    background: var(--background-color);
+}
+
+.gallery__inner {
+    max-width: 80rem;
+    margin-inline: auto;
+}
+
+.gallery__title {
+    margin: 0 0 var(--space-md);
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--columns), 1fr);
+    gap: var(--gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.gallery__figure {
+    margin: 0;
+}
+
+.gallery__img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+
+.gallery__caption {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+}
+
+.gallery__empty {
+    padding: var(--space-lg);
+    text-align: center;
+    color: var(--color-muted);
+    border: 2px dashed var(--color-border);
+    border-radius: 4px;
+}
+
+/* Brugerens kolonnetal skaleres ned paa smalle skaerme frem for at blive
+   ignoreret. min() holder sig til det mindste af de to. */
+@media (max-width: 60rem) {
+    .gallery__grid {
+        grid-template-columns: repeat(min(var(--columns), 2), 1fr);
+    }
+}
+
+@media (max-width: 36rem) {
+    .gallery__grid {
+        grid-template-columns: 1fr;
+    }
+}

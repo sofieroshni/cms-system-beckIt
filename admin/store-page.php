@@ -26,6 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $title      = (string) ($_POST['title'] ?? '');
 $templateId = filter_input(INPUT_POST, 'template_id', FILTER_VALIDATE_INT) ?: 0;
+$parentId   = filter_input(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT) ?: 0;
+
+// 0 fra dropdownen betyder "ingen forælder" — siden ligger i roden.
+$parent = $parentId > 0 ? $parentId : null;
 
 $pdo = Database::getConnection();
 
@@ -40,8 +44,8 @@ try {
     // 0 er den blanke side. Alt andet slås op som skabelon-id, og
     // findes det ikke, kaster PageBuilder en fejl.
     $pageId = $templateId > 0
-        ? $builder->createFromTemplate($templateId, $title)
-        : $builder->createBlank($title);
+        ? $builder->createFromTemplate($templateId, $title, $parent)
+        : $builder->createBlank($title, $parent);
 
     header('Location: editor.php?page_id=' . $pageId);
     exit;
