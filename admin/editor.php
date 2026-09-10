@@ -145,6 +145,10 @@ $blocks = $stmt->get_result();
 </body>
 </html>
 <style>
+    * {
+        padding:0px;
+        margin:0px;
+    }
     main.main-editor{
         background-color: red;
         display:flex;
