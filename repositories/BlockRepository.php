@@ -22,18 +22,30 @@ final class BlockRepository
      */
     public function findByPage(int $pageId, bool $onlyVisible = false): array
     {
-        $sql = 'SELECT id, page_id, block_type, sort_order,
-                       settings, styles, is_visible
-                  FROM page_blocks
-                 WHERE page_id = :page_id';
+        // COALESCE gør det delte indhold gældende, når rækken peger på en
+        // delt blok. Fletningen sker HER, så resten af systemet — renderer,
+        // forhåndsvisning, eksport — bare får en blok med indhold og aldrig
+        // behøver vide, at delte blokke findes.
+        $sql = 'SELECT pb.id,
+                       pb.page_id,
+                       COALESCE(sb.block_type, pb.block_type) AS block_type,
+                       pb.sort_order,
+                       COALESCE(sb.settings, pb.settings)     AS settings,
+                       COALESCE(sb.styles,   pb.styles)       AS styles,
+                       pb.is_visible,
+                       pb.shared_block_id,
+                       sb.name                                AS shared_name
+                  FROM page_blocks pb
+                  LEFT JOIN shared_blocks sb ON sb.id = pb.shared_block_id
+                 WHERE pb.page_id = :page_id';
 
         // Editoren viser skjulte blokke (så de kan slås til igen);
         // den offentlige side og eksporten gør ikke.
         if ($onlyVisible) {
-            $sql .= ' AND is_visible = 1';
+            $sql .= ' AND pb.is_visible = 1';
         }
 
-        $sql .= ' ORDER BY sort_order ASC, id ASC';
+        $sql .= ' ORDER BY pb.sort_order ASC, pb.id ASC';
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['page_id' => $pageId]);
@@ -60,22 +72,51 @@ final class BlockRepository
         string $blockType,
         array $settings,
         array $styles = [],
-        ?int $sortOrder = null
+        ?int $sortOrder = null,
+        ?int $sharedBlockId = null
     ): int {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO page_blocks (page_id, block_type, sort_order, settings, styles)
-             VALUES (:page_id, :block_type, :sort_order, :settings, :styles)'
+            'INSERT INTO page_blocks
+                (page_id, block_type, sort_order, settings, styles, shared_block_id)
+             VALUES
+                (:page_id, :block_type, :sort_order, :settings, :styles, :shared)'
         );
 
         $stmt->execute([
             'page_id'    => $pageId,
             'block_type' => $blockType,
             'sort_order' => $sortOrder ?? $this->nextSortOrder($pageId),
-            'settings'   => $this->encode($settings),
-            'styles'     => $this->encode($styles),
+
+            // Peger rækken på en delt blok, bruges dens egne settings
+            // aldrig. De gemmes som tomme frem for som en kopi, der ville
+            // kunne nå at blive forældet.
+            'settings'   => $this->encode($sharedBlockId !== null ? [] : $settings),
+            'styles'     => $this->encode($sharedBlockId !== null ? [] : $styles),
+            'shared'     => $sharedBlockId,
         ]);
 
         return (int) $this->pdo->lastInsertId();
+    }
+
+    /**
+     * Flytter en blok uden at røre dens indhold.
+     *
+     * Bruges til henvisninger til delte blokke: siden bestemmer, hvor
+     * blokken står, men ikke hvad der står i den.
+     */
+    public function updatePosition(int $id, int $pageId, int $sortOrder): void
+    {
+        $stmt = $this->pdo->prepare(
+            'UPDATE page_blocks
+                SET sort_order = :sort_order
+              WHERE id = :id AND page_id = :page_id'
+        );
+
+        $stmt->execute([
+            'sort_order' => $sortOrder,
+            'id'         => $id,
+            'page_id'    => $pageId,
+        ]);
     }
 
     /**
@@ -225,6 +266,12 @@ final class BlockRepository
         $row['page_id']    = (int) $row['page_id'];
         $row['sort_order'] = (int) $row['sort_order'];
         $row['is_visible'] = (bool) $row['is_visible'];
+
+        // Sat betyder: indholdet ovenfor kom fra en delt blok, og siden
+        // ejer det ikke.
+        $row['shared_block_id'] = isset($row['shared_block_id'])
+            ? (int) $row['shared_block_id']
+            : 0;
         $row['settings']   = $this->decode($row['settings'] ?? '{}');
         $row['styles']     = $this->decode($row['styles'] ?? '{}');
 

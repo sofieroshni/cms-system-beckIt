@@ -49,27 +49,9 @@ final class ImageBlock extends AbstractBlock
     public static function getStyleSchema(): array
     {
         return [
-            'max_width' => [
-                'type'    => 'number',
-                'label'   => 'Maksimal bredde',
-                'default' => 800,
-                'min'     => 100,
-                'max'     => 2000,
-                'unit'    => 'px',
-            ],
-            'radius' => [
-                'type'    => 'number',
-                'label'   => 'Afrundede hjørner',
-                'default' => 0,
-                'min'     => 0,
-                'max'     => 64,
-                'unit'    => 'px',
-            ],
-            'background_color' => [
-                'type'    => 'color',
-                'label'   => 'Baggrundsfarve',
-                'default' => '#ffffff',
-            ],
+            'max_width'        => self::sizeField('Maksimal bredde', 800, 100, 2000),
+            'radius'           => self::sizeField('Afrundede hjørner', 0, 0, 64),
+            'background_color' => self::colorField('Baggrundsfarve', '#ffffff'),
         ];
     }
 

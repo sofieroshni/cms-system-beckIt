@@ -52,6 +52,134 @@ abstract class AbstractBlock implements BlockInterface
         return $defaults;
     }
 
+    /* -----------------------------------------------------------------
+       Feltfabrikker
+       -----------------------------------------------------------------
+       De samme stylingfelter gik igen i hver eneste blok: baggrundsfarve,
+       tekstfarve, skrifttype, skriftstørrelse. Fem kopier af den samme
+       definition betyder fem steder at rette, hvis fx listen over tilladte
+       skrifttyper skal udvides.
+
+       Metoderne her laver ét felt hver. En blok beskriver dermed kun det,
+       der faktisk er særligt for den.
+       ----------------------------------------------------------------- */
+
+    /**
+     * De stylingfelter, næsten enhver sektion har brug for.
+     *
+     * @param array<string, array<string, mixed>> $extra Blokkens egne felter.
+     * @return array<string, array<string, mixed>>
+     */
+    protected static function sectionStyles(array $extra = []): array
+    {
+        // $extra lægges sidst, så en blok kan overskrive et fællesfelt —
+        // fx give baggrundsfarven en anden standardværdi.
+        return array_merge(
+            [
+                'background_color' => self::colorField('Baggrundsfarve', '#ffffff'),
+                'text_color'       => self::colorField('Tekstfarve', '#1f2933'),
+                'font_family'      => self::fontField(),
+            ],
+            $extra
+        );
+    }
+
+    /** @return array<string, mixed> */
+    protected static function colorField(string $label, string $default): array
+    {
+        return [
+            'type'    => 'color',
+            'label'   => $label,
+            'default' => $default,
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    protected static function fontField(string $default = 'Jost'): array
+    {
+        return [
+            'type'    => 'select',
+            'label'   => 'Skrifttype',
+            'default' => $default,
+            'options' => FieldValidator::ALLOWED_FONTS,
+        ];
+    }
+
+    /**
+     * Et talfelt med enhed. Bruges til skriftstørrelser, afstande og
+     * hjørneradier.
+     *
+     * @return array<string, mixed>
+     */
+    protected static function sizeField(
+        string $label,
+        int $default,
+        int $min = 10,
+        int $max = 120,
+        string $unit = 'px'
+    ): array {
+        return [
+            'type'    => 'number',
+            'label'   => $label,
+            'default' => $default,
+            'min'     => $min,
+            'max'     => $max,
+            'unit'    => $unit,
+        ];
+    }
+
+    /**
+     * Udregner adressen på et link, der enten peger på en side i systemet
+     * eller på en ekstern adresse.
+     *
+     * Mønsteret gik igen i navbar, kort, knapper og footer. Reglen er den
+     * samme hvert sted: en valgt side vinder over en skrevet adresse,
+     * fordi den interne henvisning er den robuste — den overlever, at
+     * målsiden får en ny slug eller flyttes ned under en forælder.
+     *
+     * @param array<string, mixed> $source Rækken eller feltsættet med
+     *                                     nøglerne page og url.
+     */
+    protected static function linkHref(
+        array $source,
+        RenderContext $context,
+        string $pageKey = 'page',
+        string $urlKey = 'url'
+    ): string {
+        $pageId = (int) ($source[$pageKey] ?? 0);
+
+        if ($pageId > 0) {
+            return $context->pageUrl($pageId);
+        }
+
+        $url = trim((string) ($source[$urlKey] ?? ''));
+
+        // '#' frem for tom streng: et href="" peger på den aktuelle side
+        // og ville få browseren til at genindlæse ved klik.
+        return $url !== '' ? $url : '#';
+    }
+
+    /**
+     * Felterne til et link. Bruges i repeatere og som knap-felter.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    protected static function linkFields(string $prefix = ''): array
+    {
+        return [
+            $prefix . 'page' => [
+                'type'    => 'page',
+                'label'   => 'Side',
+                'default' => 0,
+            ],
+            $prefix . 'url' => [
+                'type'    => 'url',
+                'label'   => 'Ekstern adresse',
+                'default' => '',
+            ],
+        ];
+    }
+
     /**
      * Renderer blokkens template.php.
      *

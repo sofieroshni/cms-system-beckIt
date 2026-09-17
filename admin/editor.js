@@ -96,6 +96,21 @@
         // af sandheden.
         const blocks = Array.from(canvas.querySelectorAll('.ed-block')).map(
             function (block) {
+                const sharedId = block.dataset.sharedBlockId || null;
+
+                // En delt blok har ingen felter paa siden. Kun henvisningen
+                // og placeringen sendes med; indholdet hoerer til den delte
+                // blok og aendres kun under "Delte blokke".
+                if (sharedId) {
+                    return {
+                        id: block.dataset.blockId || null,
+                        type: block.dataset.blockType,
+                        shared_block_id: sharedId,
+                        settings: {},
+                        styles: {}
+                    };
+                }
+
                 const fields = collectFields(block);
 
                 return {

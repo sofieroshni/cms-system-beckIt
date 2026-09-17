@@ -50,6 +50,11 @@ $context = RenderContext::editor($basePath, $siteMap);
 // som en dropdown frem for et tekstfelt, man kan stave forkert i.
 $fields = new FieldRenderer($siteMap->choices(), $basePath);
 
+// Delte blokke kan saettes ind paa siden, men redigeres kun under
+// "Delte blokke". Listen bruges baade til plus-menuen og til skabelonerne
+// nederst paa siden.
+$sharedBlocks = (new SharedBlockRepository($pdo))->findAll();
+
 ?>
 <!DOCTYPE html>
 <html lang="da">
@@ -122,25 +127,43 @@ $fields = new FieldRenderer($siteMap->choices(), $basePath);
             $settings = FieldValidator::validateAll($class::getSchema(), $block['settings']);
             $styles   = FieldValidator::validateAll($class::getStyleSchema(), $block['styles']);
         ?>
-        <article class="ed-block"
+        <?php $sharedId = (int) ($block['shared_block_id'] ?? 0); ?>
+        <article class="ed-block<?= $sharedId > 0 ? ' ed-block--shared' : '' ?>"
                  data-block-id="<?= (int) $block['id'] ?>"
-                 data-block-type="<?= e($block['block_type']) ?>">
+                 data-block-type="<?= e($block['block_type']) ?>"
+                 <?= $sharedId > 0 ? 'data-shared-block-id="' . $sharedId . '"' : '' ?>>
 
             <span class="ed-block__label"><?= e($class::label()) ?></span>
 
             <div class="ed-block__actions">
-                <button type="button" class="ed-btn ed-btn--edit" data-action="edit"
-                        aria-expanded="false">&#9998;</button>
+                <?php /*
+                    En delt blok har ingen blyant. Kunne man redigere den
+                    her, ville aendringen slaa igennem paa alle andre sider
+                    uden at det fremgik — og det er praecis den slags
+                    overraskelse, laasen findes for at undgaa.
+                */ ?>
+                <?php if ($sharedId === 0): ?>
+                    <button type="button" class="ed-btn ed-btn--edit" data-action="edit"
+                            aria-expanded="false">&#9998;</button>
+                <?php endif; ?>
                 <button type="button" class="ed-btn ed-btn--move" data-action="up">&and;</button>
                 <button type="button" class="ed-btn ed-btn--move" data-action="down">&or;</button>
                 <button type="button" class="ed-btn ed-btn--delete" data-action="delete">&times;</button>
             </div>
 
+            <?php if ($sharedId > 0): ?>
+                <p class="ed-shared-note">
+                    Delt blok: <strong><?= e((string) ($block['shared_name'] ?? '')) ?></strong>.
+                    Indholdet redigeres under
+                    <a href="shared.php">Delte blokke</a> og er ens på alle sider.
+                </p>
+            <?php endif; ?>
+
             <div class="ed-block__preview">
                 <?= $class::render($settings, $styles, $context) ?>
             </div>
 
-            <?= $fields->panel($class, $settings, $styles) ?>
+            <?= $sharedId > 0 ? '' : $fields->panel($class, $settings, $styles) ?>
         </article>
     <?php endforeach; ?>
 </main>
@@ -154,6 +177,19 @@ $fields = new FieldRenderer($siteMap->choices(), $basePath);
                 <?= e($label) ?>
             </button>
         <?php endforeach; ?>
+
+        <?php if ($sharedBlocks !== []): ?>
+            <p class="ed-add__heading">Delte blokke</p>
+            <?php foreach ($sharedBlocks as $sharedBlock): ?>
+                <?php if (!BlockRegistry::exists((string) $sharedBlock['block_type'])) {
+                    continue;
+                } ?>
+                <button type="button" class="ed-add__choice ed-add__choice--shared"
+                        data-add-type="shared-<?= (int) $sharedBlock['id'] ?>">
+                    <?= e($sharedBlock['name']) ?>
+                </button>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -195,6 +231,47 @@ $fields = new FieldRenderer($siteMap->choices(), $basePath);
                 <?= $class::render($defaults, $dStyles, $context) ?>
             </div>
             <?= $fields->panel($class, $defaults, $dStyles) ?>
+        </article>
+    </template>
+<?php endforeach; ?>
+
+<?php /* Skabeloner for delte blokke. Laaste fra starten, som de vises. */ ?>
+<?php foreach ($sharedBlocks as $sharedBlock): ?>
+    <?php
+        $sharedClass = BlockRegistry::get((string) $sharedBlock['block_type']);
+        if ($sharedClass === null) {
+            continue;
+        }
+        $sharedSettings = FieldValidator::validateAll(
+            $sharedClass::getSchema(), $sharedBlock['settings']
+        );
+        $sharedStyles = FieldValidator::validateAll(
+            $sharedClass::getStyleSchema(), $sharedBlock['styles']
+        );
+    ?>
+    <template data-template-for="shared-<?= (int) $sharedBlock['id'] ?>">
+        <article class="ed-block ed-block--shared"
+                 data-block-id=""
+                 data-block-type="<?= e($sharedBlock['block_type']) ?>"
+                 data-shared-block-id="<?= (int) $sharedBlock['id'] ?>">
+
+            <span class="ed-block__label"><?= e($sharedClass::label()) ?></span>
+
+            <div class="ed-block__actions">
+                <button type="button" class="ed-btn ed-btn--move" data-action="up">&and;</button>
+                <button type="button" class="ed-btn ed-btn--move" data-action="down">&or;</button>
+                <button type="button" class="ed-btn ed-btn--delete" data-action="delete">&times;</button>
+            </div>
+
+            <p class="ed-shared-note">
+                Delt blok: <strong><?= e($sharedBlock['name']) ?></strong>.
+                Indholdet redigeres under
+                <a href="shared.php">Delte blokke</a> og er ens på alle sider.
+            </p>
+
+            <div class="ed-block__preview">
+                <?= $sharedClass::render($sharedSettings, $sharedStyles, $context) ?>
+            </div>
         </article>
     </template>
 <?php endforeach; ?>

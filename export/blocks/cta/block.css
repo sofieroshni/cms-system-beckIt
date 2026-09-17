@@ -1,0 +1,48 @@
+/* =====================================================================
+   Opfordring
+   ===================================================================== */
+
+.block--cta {
+    --background-color: #ffffff;
+    --text-color: #1f2933;
+    --button-color: #9db4d8;
+    --font-family: 'Jost';
+    --title-size: 18px;
+
+    padding: var(--space-lg) var(--space-md);
+    background: var(--background-color);
+    color: var(--text-color);
+    font-family: var(--font-family), var(--font-body);
+}
+
+.cta__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-sm);
+    max-width: var(--measure);
+    margin-inline: auto;
+    text-align: center;
+}
+
+.cta__title {
+    margin: 0;
+    font-size: var(--title-size);
+    font-weight: 700;
+}
+
+.cta__text {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.cta__button {
+    padding: 0.45rem 1.4rem;
+    background: var(--button-color);
+    color: #1f2933;
+    text-decoration: none;
+    font-style: italic;
+}
+
+.cta__button:hover {
+    filter: brightness(1.06);
+}

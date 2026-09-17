@@ -45,31 +45,13 @@ final class HeroBlock extends AbstractBlock
 
     public static function getStyleSchema(): array
     {
+        // Hero har ingen baggrundsFARVE — baggrunden er et billede.
+        // Derfor bygges skemaet af enkeltfelter frem for af sectionStyles().
         return [
-            'title_size' => [
-                'type'    => 'number',
-                'label'   => 'Skriftstørrelse',
-                'default' => 48,
-                'min'     => 12,
-                'max'     => 120,
-                'unit'    => 'px',
-            ],
-            'font_family' => [
-                'type'    => 'select',
-                'label'   => 'Skrifttype',
-                'default' => 'Jost',
-                'options' => FieldValidator::ALLOWED_FONTS,
-            ],
-            'text_color' => [
-                'type'    => 'color',
-                'label'   => 'Tekstfarve',
-                'default' => '#ffffff',
-            ],
-            'box_color' => [
-                'type'    => 'color',
-                'label'   => 'Boksfarve',
-                'default' => '#1e3a8a',
-            ],
+            'title_size'  => self::sizeField('Skriftstørrelse', 48, 12, 120),
+            'font_family' => self::fontField(),
+            'text_color'  => self::colorField('Tekstfarve', '#ffffff'),
+            'box_color'   => self::colorField('Boksfarve', '#1e3a8a'),
         ];
     }
 

@@ -17,6 +17,62 @@
     const status = document.getElementById('list-status');
     let dragged = null;
 
+    /* --- Skift status ------------------------------------------------ */
+
+    list.addEventListener('click', async function (event) {
+        const button = event.target.closest('[data-action="toggle-status"]');
+
+        if (!button) {
+            return;
+        }
+
+        const goingLive = button.dataset.status !== 'published';
+
+        const message = goingLive
+            ? 'Vil du udgive \u00bb' + button.dataset.title + '\u00ab?'
+            : 'Vil du saette \u00bb' + button.dataset.title + '\u00ab tilbage til kladde?';
+
+        // Paamindelsen er med, fordi status og udgivelse er to ting.
+        // En side bliver ikke synlig paa websitet, foer sitet bygges.
+        if (!confirm(message + '\n\nAendringen slaar foerst igennem paa websitet, naar du bygger det under Udgiv.')) {
+            return;
+        }
+
+        const row = button.closest('.page-row');
+
+        button.disabled = true;
+        status.textContent = 'Skifter status \u2026';
+
+        try {
+            const response = await fetch('toggle-status.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: row.dataset.pageId })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.ok) {
+                throw new Error(result.error || 'Ukendt fejl');
+            }
+
+            button.dataset.status = result.status;
+            button.textContent = result.label;
+            button.classList.toggle('badge--published', result.status === 'published');
+            button.classList.toggle('badge--draft', result.status === 'draft');
+
+            status.textContent = 'Status aendret';
+            setTimeout(function () {
+                status.textContent = '';
+            }, 2000);
+
+        } catch (error) {
+            status.textContent = 'Kunne ikke skifte status: ' + error.message;
+        } finally {
+            button.disabled = false;
+        }
+    });
+
     /* --- Start og slut ---------------------------------------------- */
 
     // Kun grebet starter et traek. Var hele raekken traekbar, ville man

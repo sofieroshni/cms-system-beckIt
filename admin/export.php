@@ -62,8 +62,8 @@ $basePath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
     <ul class="sidebar__nav">
         <li><a href="index.php">Dine sider</a></li>
         <li><a href="create-page.php">Opret side</a></li>
+        <li><a href="shared.php">Delte blokke</a></li>
         <li><a href="export.php" aria-current="page">Udgiv</a></li>
-        <li><a href="#">Galleri</a></li>
         <li><a href="#">Indstillinger</a></li>
     </ul>
 </nav>

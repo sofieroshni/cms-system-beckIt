@@ -70,32 +70,11 @@ final class NavbarBlock extends AbstractBlock
 
     public static function getStyleSchema(): array
     {
-        return [
-            'background_color' => [
-                'type'    => 'color',
-                'label'   => 'Baggrundsfarve',
-                'default' => '#1e3a8a',
-            ],
-            'text_color' => [
-                'type'    => 'color',
-                'label'   => 'Tekstfarve',
-                'default' => '#ffffff',
-            ],
-            'link_size' => [
-                'type'    => 'number',
-                'label'   => 'Skriftstørrelse',
-                'default' => 16,
-                'min'     => 10,
-                'max'     => 48,
-                'unit'    => 'px',
-            ],
-            'font_family' => [
-                'type'    => 'select',
-                'label'   => 'Skrifttype',
-                'default' => 'Jost',
-                'options' => FieldValidator::ALLOWED_FONTS,
-            ],
-        ];
+        return self::sectionStyles([
+            'background_color' => self::colorField('Baggrundsfarve', '#1e3a8a'),
+            'text_color'       => self::colorField('Tekstfarve', '#ffffff'),
+            'link_size'        => self::sizeField('Skriftstørrelse', 16, 10, 48),
+        ]);
     }
 
     public static function render(
@@ -117,17 +96,11 @@ final class NavbarBlock extends AbstractBlock
                 continue;
             }
 
-            $pageId = (int) ($link['page'] ?? 0);
-
             // Adressen udregnes HER, ikke i templaten. Templaten skal kun
             // vise; den skal ikke vide noget om sitets struktur.
-            $href = $pageId > 0
-                ? $context->pageUrl($pageId)
-                : (string) ($link['url'] ?? '#');
-
             $links[] = [
                 'label' => $text,
-                'href'  => $href !== '' ? $href : '#',
+                'href'  => static::linkHref($link, $context),
             ];
         }
 

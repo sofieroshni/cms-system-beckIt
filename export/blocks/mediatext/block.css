@@ -1,0 +1,76 @@
+/* =====================================================================
+   Billede og tekst
+   ===================================================================== */
+
+.block--mediatext {
+    --background-color: #1e3a8a;
+    --text-color: #ffffff;
+    --font-family: 'Jost';
+    --title-size: 22px;
+
+    padding: var(--space-lg) var(--space-md);
+}
+
+.mediatext__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 70rem;
+    margin-inline: auto;
+    font-family: var(--font-family), var(--font-body);
+}
+
+.mediatext__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mediatext__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-lg);
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+.mediatext__title {
+    margin: 0 0 var(--space-sm);
+    font-size: var(--title-size);
+    font-style: italic;
+    line-height: 1.35;
+}
+
+.mediatext__text {
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+.mediatext__caption {
+    margin: var(--space-md) 0 0;
+    font-size: 0.7rem;
+    opacity: 0.8;
+    text-align: right;
+}
+
+/* Billedet flyttes til hoejre ved at bytte om paa kolonnerne. Selve
+   raekkefoelgen i HTML'en er uaendret, saa skaermlaesere altid moeder
+   billedet foer teksten. */
+.mediatext--image-right .mediatext__media {
+    order: 2;
+}
+
+@media (max-width: 48rem) {
+    .mediatext__inner {
+        grid-template-columns: 1fr;
+    }
+
+    /* Paa mobil staar billedet altid oeverst, uanset indstillingen. */
+    .mediatext--image-right .mediatext__media {
+        order: 0;
+    }
+
+    .mediatext__body {
+        padding: var(--space-md);
+    }
+}

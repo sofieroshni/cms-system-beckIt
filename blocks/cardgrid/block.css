@@ -1,0 +1,77 @@
+/* =====================================================================
+   Kortgitter
+   ===================================================================== */
+
+.block--cardgrid {
+    --background-color: #7a7a7a;
+    --text-color: #ffffff;
+    --card-color: #ffffff;
+    --font-family: 'Jost';
+    --columns: 3;
+    --title-size: 24px;
+
+    padding: var(--space-lg) var(--space-md);
+    background: var(--background-color);
+    font-family: var(--font-family), var(--font-body);
+}
+
+.cardgrid__title {
+    max-width: 60rem;
+    margin: 0 auto var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    background: rgb(0 0 0 / 0.12);
+    color: var(--text-color);
+    font-size: var(--title-size);
+    text-align: center;
+}
+
+.cardgrid__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--columns), 1fr);
+    gap: var(--space-md);
+    max-width: 70rem;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+}
+
+/* Kortene strækkes til samme højde, og knappen skubbes ned i bunden, så
+   den flugter på tværs af kort med forskellig tekstlængde. */
+.cardgrid__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--card-color);
+    color: var(--color-text);
+}
+
+.cardgrid__text {
+    margin: 0;
+    flex: 1;
+}
+
+.cardgrid__button {
+    align-self: flex-start;
+    padding: 0.4rem 1.1rem;
+    background: #9db4d8;
+    color: #1f2933;
+    text-decoration: none;
+    font-style: italic;
+}
+
+.cardgrid__button:hover {
+    filter: brightness(1.06);
+}
+
+@media (max-width: 60rem) {
+    .cardgrid__grid {
+        grid-template-columns: repeat(min(var(--columns), 2), 1fr);
+    }
+}
+
+@media (max-width: 36rem) {
+    .cardgrid__grid {
+        grid-template-columns: 1fr;
+    }
+}

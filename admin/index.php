@@ -37,8 +37,8 @@ $basePath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
     <ul class="sidebar__nav">
         <li><a href="index.php" aria-current="page">Dine sider</a></li>
         <li><a href="create-page.php">Opret side</a></li>
+        <li><a href="shared.php">Delte blokke</a></li>
         <li><a href="export.php">Udgiv</a></li>
-        <li><a href="#">Galleri</a></li>
         <li><a href="#">Indstillinger</a></li>
     </ul>
 </nav>
@@ -68,9 +68,19 @@ $basePath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
 
                 <span class="page-row__title"><?= e($page['title']) ?></span>
 
-                <span class="badge badge--<?= e($page['status']) ?>">
+                <?php /*
+                    Badgen er en knap, saa status kan skiftes uden at aabne
+                    editoren. Der er kun to tilstande, saa et klik er hurtigere
+                    end en menu med to valg.
+                */ ?>
+                <button type="button"
+                        class="badge badge--<?= e($page['status']) ?> badge--toggle"
+                        data-action="toggle-status"
+                        data-status="<?= e($page['status']) ?>"
+                        data-title="<?= e($page['title']) ?>"
+                        aria-label="Skift status for <?= e($page['title']) ?>">
                     <?= $page['status'] === 'published' ? 'udgivet' : 'kladde' ?>
-                </span>
+                </button>
 
                 <a class="icon-btn icon-btn--view"
                    href="<?= e($basePath) ?>/page.php?id=<?= (int) $page['id'] ?>"

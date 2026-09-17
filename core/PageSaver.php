@@ -183,6 +183,26 @@ final class PageSaver
             return null;
         }
 
+        $sharedId = (int) ($block['shared_block_id'] ?? 0);
+
+        // Peger blokken på en delt blok, ejer siden ikke indholdet. Kun
+        // placeringen gemmes, og alt hvad browseren måtte have sendt med
+        // af settings ignoreres — ellers kunne en manipuleret forespørgsel
+        // lægge indhold ned på en række, der aldrig bliver læst, og skabe
+        // tvivl om, hvad der egentlig er gældende.
+        if ($sharedId > 0) {
+            if ($id = $this->existingId($block, $existingIds)) {
+                $this->blocks->updatePosition($id, $pageId, $sortOrder);
+                return $id;
+            }
+
+            // En ukendt shared_block_id afvises af fremmednøglen i
+            // databasen, så der er ingen grund til at slå den op her.
+            return $this->blocks->insert(
+                $pageId, $type, [], [], $sortOrder, $sharedId
+            );
+        }
+
         // Kun felter, skemaet kender, kommer med — og hver værdi tjekkes
         // mod sin felttype. Det er her et forsøg på at gemme
         // 'red; background:url(evil)' som farve bliver til standardværdien.
@@ -196,16 +216,27 @@ final class PageSaver
             is_array($block['styles'] ?? null) ? $block['styles'] : []
         );
 
-        $id = isset($block['id']) ? (int) $block['id'] : 0;
-
-        // Et id, der ikke i forvejen hører til denne side, behandles som
-        // en ny blok. Så kan et manipuleret id ikke overskrive en blok
-        // på en anden side.
-        if ($id > 0 && in_array($id, $existingIds, true)) {
+        if ($id = $this->existingId($block, $existingIds)) {
             $this->blocks->update($id, $pageId, $settings, $styles, $sortOrder);
             return $id;
         }
 
         return $this->blocks->insert($pageId, $type, $settings, $styles, $sortOrder);
+    }
+
+    /**
+     * Blokkens id, hvis den i forvejen hører til denne side — ellers 0.
+     *
+     * Et id, der ikke findes på siden, behandles som en ny blok. Så kan et
+     * manipuleret id ikke bruges til at overskrive en blok på en anden side.
+     *
+     * @param array<string, mixed> $block
+     * @param array<int, int>      $existingIds
+     */
+    private function existingId(array $block, array $existingIds): int
+    {
+        $id = isset($block['id']) ? (int) $block['id'] : 0;
+
+        return ($id > 0 && in_array($id, $existingIds, true)) ? $id : 0;
     }
 }

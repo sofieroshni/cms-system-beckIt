@@ -1,85 +1,86 @@
 /* =====================================================================
-   Velkomst
+   Tekstsektion
    ===================================================================== */
 
-.block--welcome {
-    --title-size: 36px;
-    --font-family: 'Jost';
+.block--textsection {
     --background-color: #1e3a8a;
     --text-color: #ffffff;
+    --font-family: 'Jost';
+    --title-size: 36px;
+    --text-align: center;
 
     padding: var(--space-lg) var(--space-md);
 }
 
-.welcome__inner {
+.textsection__inner {
     max-width: 60rem;
     margin-inline: auto;
     padding: var(--space-lg);
     background: var(--background-color);
     color: var(--text-color);
-    text-align: center;
+    font-family: var(--font-family), var(--font-body);
+    text-align: var(--text-align);
 }
 
-.welcome__title {
+.textsection__title {
     margin: 0 0 var(--space-md);
-    font-family: var(--font-family), var(--font-body);
     font-size: var(--title-size);
     font-weight: 700;
     line-height: 1.2;
 }
 
-/* Den vandrette streg under overskriften i designet. */
-.welcome__title::after {
+/* Den vandrette streg under overskriften. margin-inline: auto centrerer
+   den kun, naar sektionen er centreret; ellers foelger den justeringen. */
+.textsection__title::after {
     content: '';
     display: block;
     width: 4rem;
     height: 2px;
-    margin: var(--space-sm) auto 0;
+    margin-block-start: var(--space-sm);
+    margin-inline: auto;
     background: currentColor;
 }
 
-.welcome__intro {
+.textsection__intro {
     max-width: var(--measure);
     margin-inline: auto;
     font-size: 0.95rem;
 }
 
-.welcome__card {
+.textsection__card {
     margin-top: var(--space-md);
     padding: var(--space-md);
     background: rgb(255 255 255 / 0.9);
     color: var(--color-text);
     text-align: left;
-
-    /* Den lyse kant i venstre side fra designet. */
     border-left: 4px solid rgb(255 255 255 / 0.6);
 }
 
-.welcome__list-title {
+.textsection__list-title {
     margin: 0 0 var(--space-sm);
     font-size: 1.05rem;
 }
 
-.welcome__list {
+.textsection__list {
     margin: 0;
     padding-left: 1.25rem;
 }
 
-.welcome__list li + li {
+.textsection__list li + li {
     margin-top: 0.35rem;
 }
 
-.welcome__footer {
+.textsection__footer {
     margin: var(--space-md) 0 0;
     font-size: 0.95rem;
 }
 
 @media (max-width: 40rem) {
-    .welcome__inner {
+    .textsection__inner {
         padding: var(--space-md);
     }
 
-    .welcome__title {
+    .textsection__title {
         font-size: clamp(1.35rem, 6vw, var(--title-size));
     }
 }

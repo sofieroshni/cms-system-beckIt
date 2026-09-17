@@ -61,34 +61,12 @@ final class GalleryBlock extends AbstractBlock
     public static function getStyleSchema(): array
     {
         return [
-            'columns' => [
-                'type'    => 'number',
-                'label'   => 'Antal kolonner',
-                'default' => 3,
-                'min'     => 1,
-                'max'     => 6,
-            ],
-            'gap' => [
-                'type'    => 'number',
-                'label'   => 'Afstand mellem billeder',
-                'default' => 16,
-                'min'     => 0,
-                'max'     => 64,
-                'unit'    => 'px',
-            ],
-            'radius' => [
-                'type'    => 'number',
-                'label'   => 'Afrundede hjørner',
-                'default' => 4,
-                'min'     => 0,
-                'max'     => 64,
-                'unit'    => 'px',
-            ],
-            'background_color' => [
-                'type'    => 'color',
-                'label'   => 'Baggrundsfarve',
-                'default' => '#ffffff',
-            ],
+            // Kolonnetallet har ingen enhed — det er et rent antal, ikke
+            // en maalt stoerrelse.
+            'columns'          => self::sizeField('Antal kolonner', 3, 1, 6, ''),
+            'gap'              => self::sizeField('Afstand mellem billeder', 16, 0, 64),
+            'radius'           => self::sizeField('Afrundede hjørner', 4, 0, 64),
+            'background_color' => self::colorField('Baggrundsfarve', '#ffffff'),
         ];
     }
 

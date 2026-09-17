@@ -38,8 +38,8 @@ $error    = $_GET['fejl'] ?? null;
     <ul class="sidebar__nav">
         <li><a href="index.php">Dine sider</a></li>
         <li><a href="create-page.php" aria-current="page">Opret side</a></li>
+        <li><a href="shared.php">Delte blokke</a></li>
         <li><a href="export.php">Udgiv</a></li>
-        <li><a href="#">Galleri</a></li>
         <li><a href="#">Indstillinger</a></li>
     </ul>
 </nav>

@@ -38,46 +38,16 @@ final class TextAreaBlock extends AbstractBlock
 
     public static function getStyleSchema(): array
     {
-        return [
-            'title_size' => [
-                'type'    => 'number',
-                'label'   => 'Overskriftens størrelse',
-                'default' => 28,
-                'min'     => 12,
-                'max'     => 72,
-                'unit'    => 'px',
-            ],
-            'text_size' => [
-                'type'    => 'number',
-                'label'   => 'Tekstens størrelse',
-                'default' => 16,
-                'min'     => 10,
-                'max'     => 32,
-                'unit'    => 'px',
-            ],
-            'font_family' => [
-                'type'    => 'select',
-                'label'   => 'Skrifttype',
-                'default' => 'Jost',
-                'options' => FieldValidator::ALLOWED_FONTS,
-            ],
-            'text_color' => [
-                'type'    => 'color',
-                'label'   => 'Tekstfarve',
-                'default' => '#1f2933',
-            ],
-            'background_color' => [
-                'type'    => 'color',
-                'label'   => 'Baggrundsfarve',
-                'default' => '#ffffff',
-            ],
+        return self::sectionStyles([
+            'title_size' => self::sizeField('Overskriftens størrelse', 28, 12, 72),
+            'text_size'  => self::sizeField('Tekstens størrelse', 16, 10, 32),
             'text_align' => [
                 'type'    => 'select',
                 'label'   => 'Justering',
                 'default' => 'left',
                 'options' => ['left', 'center', 'right'],
             ],
-        ];
+        ]);
     }
 
     public static function render(

@@ -479,3 +479,65 @@
     border-radius: var(--radius);
     background: #fff;
 }
+
+/* --- Delte blokke ---------------------------------------------------- */
+
+.shared-block {
+    margin-bottom: 1.5rem;
+}
+
+.shared-block__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 0 0 0.75rem;
+}
+
+.shared-block__name {
+    flex: 1 1 14rem;
+    padding: 0.5rem 0.7rem;
+    font: inherit;
+    font-weight: 600;
+    border: 1px solid #c7ccd3;
+    border-radius: var(--radius);
+}
+
+.shared-block__usage {
+    font-size: 0.85rem;
+    color: var(--admin-muted);
+}
+
+.shared-block__delete {
+    margin: 0;
+    display: inline;
+}
+
+.shared-block__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0 0;
+}
+
+.shared-block__actions .ed-status {
+    margin-right: auto;
+}
+
+/* --- Statusknap i sidelisten ---------------------------------------- */
+
+.badge--toggle {
+    border: 0;
+    font: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+}
+
+.badge--toggle:hover:not(:disabled) {
+    filter: brightness(1.12);
+}
+
+.badge--toggle:disabled {
+    opacity: 0.6;
+    cursor: default;
+}

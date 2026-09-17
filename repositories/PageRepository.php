@@ -164,6 +164,29 @@ final class PageRepository
     }
 
     /**
+     * Skifter sidens status mellem kladde og udgivet.
+     *
+     * Egen metode frem for update(), fordi statusskiftet fra oversigten
+     * ikke skal roere titel, slug eller placering. En metode, der skriver
+     * mere end kaldet beder om, er en metode der foer eller siden
+     * overskriver noget ved et uheld.
+     *
+     * @throws InvalidArgumentException ved ukendt status.
+     */
+    public function setStatus(int $id, string $status): void
+    {
+        if (!in_array($status, ['draft', 'published'], true)) {
+            throw new InvalidArgumentException('Ugyldig status.');
+        }
+
+        $stmt = $this->pdo->prepare(
+            'UPDATE pages SET status = :status WHERE id = :id'
+        );
+
+        $stmt->execute(['status' => $status, 'id' => $id]);
+    }
+
+    /**
      * Sidens blokke fjernes automatisk af ON DELETE CASCADE.
      * Har siden undersider, afviser databasen sletningen (ON DELETE RESTRICT).
      */
